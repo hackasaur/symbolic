@@ -1,0 +1,35 @@
+{
+  "name": "symbol-writer",
+  "version": "1.0.0",
+  "description": "text editor for html canvas",
+  "keywords": [
+    "text",
+    "canvas",
+    "editor"
+  ],
+  "homepage": "https://github.com/hackasaur/symbol-writer#readme",
+  "bugs": {
+    "url": "https://github.com/hackasaur/symbol-writer/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/hackasaur/symbol-writer.git"
+  },
+  "license": "ISC",
+  "author": "hackasaur",
+  "type": "commonjs",
+  "main": "index.js",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc",
+    "clean": "rm -rf dist",
+    "prepublishOnly": "npm run clean && npm run build"
+  },
+  "dependencies": {
+    "@tweenjs/tween.js": "^25.0.0"
+  },
+  "devDependencies": {
+    "typescript": "^7.0.2",
+    "vite": "^8.2.0"
+  }
+}
