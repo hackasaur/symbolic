@@ -1,5 +1,5 @@
-import { Rectangle } from "../utils/geometry.ts"
-import * as vector from "../utils/vector.ts"
+import { Rectangle } from "../geometry.ts"
+import * as vector from "../vector.ts"
 import * as btn from "./button.ts"
 import { Button } from "./button.ts"
 

@@ -2,16 +2,16 @@
  * textbox related stuff...
  */
 
-import * as vector from "../utils/vector"
-import * as geometry from "../utils/geometry"
+import * as vector from "./utils/vector"
+import * as geometry from "./utils/geometry"
 import * as txt from "./text"
-import { updateObject } from "../utils/misc"
-import { Vector2D } from "../utils/vector"
-import { PubSub, pubSub } from "../utils/pubsub"
-import { ModifierKeys } from "../utils/inputs"
-import * as inputs from "../utils/inputs"
-import * as gl from "../utils/gl"
-import { Tex } from "./tex"
+import { updateObject } from "./utils/misc"
+import { Vector2D } from "./utils/vector"
+import { PubSub, pubSub } from "./utils/pubsub"
+import { ModifierKeys } from "./utils/inputs"
+import * as inputs from "./utils/inputs"
+import * as gl from "./utils/gl"
+// import { Tex } from "./tex"
 import {
   TextCursor,
   RichTextInfo,
@@ -32,12 +32,14 @@ export interface TextboxArgs {
   align: TextAlignment
   boxAlign: TextAlignment
   width: number
+  height: number,
   rotation: number
-  wordWrap: boolean
   opacity: number
-  wrapInfo?: WrapInfo
   selectionColor: string,
   selectionRadii: number
+  wordWrap: boolean
+  scrollable: boolean,
+  wrapInfo?: WrapInfo // #CAUTION: assumes the wrapInfo being passed is correct
 }
 
 export interface TextboxProps extends TextboxArgs {
@@ -57,7 +59,7 @@ export interface Textbox {
     posB: LineNoPosition
   }
   initialLineNoPos: LineNoPosition | undefined // #Q: what is this for?
-  height: number // this is textHeught + 2*padding
+  height: number // this is textHeight + 2*padding
   textCoords: Vector2D
   arrowUpDownWidth: number | undefined // the width from previous line when navigating using up/down arrows
   textHeight: number // total height of the whole text
@@ -129,10 +131,12 @@ const create = (props: TextboxArgs): Textbox | Error => {
       align: props.align ? props.align : "Left",
       boxAlign: props.boxAlign ? props.boxAlign : "Center",
       width: props.width,
+      height: props.height,
       rotation: props.rotation,
       wordWrap: props.wordWrap,
       opacity: props.opacity,
       wrapInfo: props.wrapInfo,
+      scrollable: props.scrollable,
       selectionColor: props.selectionColor,
       selectionRadii: props.selectionRadii,
     },
@@ -1461,7 +1465,19 @@ const draw = (
   textbox: Textbox,
   debug?: boolean
 ) => {
-  debug = true
+  if (textbox.selectedTextPos.selected === true) {
+    highlightText(
+      ctx,
+      textbox,
+      textbox.selectedTextPos.posA,
+      textbox.selectedTextPos.posB,
+      textbox.props.selectionColor,
+      textbox.props.selectionRadii,
+      undefined,
+      debug
+    )
+  }
+
   if (textbox.props.rotation !== 0) {
     ctx.save()
     ctx.translate(textbox.props.center.x, textbox.props.center.y)
@@ -1477,7 +1493,6 @@ const draw = (
       textbox.textWidth,
       debug
     )
-
     if (textbox.typing && textbox.textCursor !== undefined) {
       let coords = vector.copy(textbox.textCursor.props.coords)
 
@@ -1513,19 +1528,6 @@ const draw = (
 
   if (textbox.props.rotation !== 0) {
     ctx.restore()
-  }
-
-  if (textbox.selectedTextPos.selected === true) {
-    highlightText(
-      ctx,
-      textbox,
-      textbox.selectedTextPos.posA,
-      textbox.selectedTextPos.posB,
-      textbox.props.selectionColor,
-      textbox.props.selectionRadii,
-      undefined,
-      debug
-    )
   }
 
   // debug
@@ -2806,7 +2808,6 @@ const update = (textbox: Textbox, args: any): Textbox => {
   }
 
   // NOTE: do not update text cursor here
-
   textbox.events.publish("update")
 
   return textbox

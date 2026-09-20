@@ -1,32 +1,37 @@
-import * as txtbox from "./text/textbox"
-import * as gl from "./utils/gl"
-import * as renderer from "./renderer"
-import * as vector from "./utils/vector"
-import * as inputs from "./utils/inputs"
-import * as inputHandler from "./inputHandler.ts"
-import { SETTINGS } from "./settings"
-import { TextAlignment } from "./text/text"
+import * as txtbox from "./textbox.ts";
+import * as gl from "./utils/gl";
+import * as renderer from "./renderer";
+import * as vector from "./utils/vector";
+import * as inputs from "./utils/inputs";
+import * as inputHandler from "./inputHandler.ts";
+import * as txtMenu from "./textMenu.ts";
+import * as menu from "./utils/menu/menu.ts";
+import { getKeysDown } from "./utils/keyboard.ts";
+import { TextAlignment, TextFormat } from "./text.ts";
+import { SETTINGS } from "./settings";
 
 function main() {
-  const [result, err] = gl.initializeCanvas("scene", "black")
+  const [result, err] = gl.initializeCanvas("scene", "black");
 
   if (err != null || result === null) {
-    console.error(err)
-    return
+    console.error(err);
+    return;
   }
 
-  let el = document.getElementById("canvas-container")
+  let el = document.getElementById("canvas-container");
 
   if (el === null) {
-    return
+    return;
   }
 
-  const { canvas, ctx } = result
+  const { canvas, ctx } = result;
 
-  let t = {
+  // === Textbox ===
+  let text = {
     lines: [
       // text for debugging
-      "NOTE abc",
+      "Symbolic",
+      "A graphical rich text editor designed for extensibility and performance",
       "The quick brown fox jumped over the lazy dog",
       "",
       "0123456789.<.>,;:/?|()[]{}-+=_*&^@!$%^&*~`",
@@ -37,78 +42,88 @@ function main() {
       {
         lineNoPosition: { lineNo: 0, positionInLine: 0 },
         textFormat: {
-          font: "American Typewriter",
-          fontSize: 20,
+          font: "Courier New",
+          fontSize: 36,
           fontColor: "PowderBlue",
           italic: false,
-          bold: false,
+          bold: true,
         },
       },
       {
         lineNoPosition: { lineNo: 1, positionInLine: 0 },
         textFormat: {
-          font: "Arial",
-          fontSize: 18,
+          font: "Bradley Hand",
+          fontSize: 32,
           fontColor: "white",
           italic: false,
           bold: false,
         },
       },
       {
-        lineNoPosition: { lineNo: 1, positionInLine: 4 },
+        lineNoPosition: { lineNo: 2, positionInLine: 0 },
         textFormat: {
-          font: "Arial",
-          fontSize: 18,
+          font: "Bradley Hand",
+          fontSize: 28,
+          fontColor: "white",
+          italic: false,
+          bold: false,
+        },
+      },
+      {
+        lineNoPosition: { lineNo: 2, positionInLine: 4 },
+        textFormat: {
+          font: "Avenir Next",
+          fontSize: 24,
           fontColor: "green",
           italic: true,
           bold: false,
         },
       },
       {
-        lineNoPosition: { lineNo: 1, positionInLine: 15 },
+        lineNoPosition: { lineNo: 2, positionInLine: 15 },
         textFormat: {
-          font: "Arial",
-          fontSize: 18,
+          font: "Baskerville",
+          fontSize: 28,
           fontColor: "skyblue",
           italic: false,
           bold: true,
         },
       },
       {
-        lineNoPosition: { lineNo: 1, positionInLine: 19 },
+        lineNoPosition: { lineNo: 2, positionInLine: 19 },
         textFormat: {
-          font: "Arial",
-          fontSize: 18,
+          font: "Bradley Hand",
+          fontSize: 28,
           fontColor: "red",
           italic: true,
           bold: false,
         },
       },
       {
-        lineNoPosition: { lineNo: 1, positionInLine: 26 },
+        lineNoPosition: { lineNo: 2, positionInLine: 26 },
         textFormat: {
-          font: "Arial",
-          fontSize: 18,
+          font: "Bradley Hand",
+          fontSize: 24,
           fontColor: "white",
           italic: false,
           bold: false,
         },
       },
       {
-        lineNoPosition: { lineNo: 1, positionInLine: 36 },
+        lineNoPosition: { lineNo: 2, positionInLine: 36 },
         textFormat: {
-          font: "Arial",
-          fontSize: 18,
+          font: "Bradley Hand",
+          fontSize: 24,
           fontColor: "yellow",
           italic: true,
           bold: false,
         },
       },
       {
-        lineNoPosition: { lineNo: 1, positionInLine: 40 },
+        lineNoPosition: { lineNo: 2, positionInLine: 40 },
         textFormat: {
-          font: "Arial",
-          fontSize: 18,
+          font: "Bradley Hand",
+          fontSize: 28,
           fontColor: "skyblue",
           italic: false,
           bold: true,
@@ -117,8 +132,8 @@ function main() {
       {
         lineNoPosition: { lineNo: 3, positionInLine: 0 },
         textFormat: {
-          font: "Chalkboard",
-          fontSize: 12,
+          font: "Bradley Hand",
+          fontSize: 32,
           fontColor: "white",
           italic: false,
           bold: false,
@@ -127,16 +142,17 @@ function main() {
       {
         lineNoPosition: { lineNo: 5, positionInLine: 0 },
         textFormat: {
-          font: "Noteworthy",
-          fontSize: 15,
-          fontColor: "silver",
+          font: "Avenir Next",
+          fontSize: 24,
+          fontColor: "white",
           italic: false,
           bold: false,
         },
       },
     ],
-    center: vector.create(400, 200),
-    width: 200,
+    center: vector.create(600, 400),
+    width: 520,
+    height: 0,
     textCursorPosition: { lineNo: 0, positionInLine: 0 },
     textCursorWidth: SETTINGS.textbox.cursorWidth,
     linespace: SETTINGS.textbox.linespace,
@@ -147,85 +163,149 @@ function main() {
     opacity: 1,
     selectionColor: SETTINGS.textbox.highlightColor,
     selectionRadii: SETTINGS.textbox.highlightRadii,
-    boxAlign: "Center" as TextAlignment
-  }
+    scrollable: false,
+    boxAlign: "Left" as TextAlignment,
+  };
 
-  let textbox: txtbox.Textbox　| Error = txtbox.create(t)
+  let textbox: txtbox.Textbox | Error = txtbox.create(text);
   if (textbox instanceof Error) {
-    console.error(textbox)
-    return
+    console.error(textbox);
+    return;
   }
 
-  txtbox.initEventsHandler(textbox)
-  let pointerEvents = inputs.createPointerEvents(el)
-  let keyboardEvents = inputs.createKeyboardEvents()
+  // === Text Menu ===
+  const textMenu = txtMenu.create(vector.create(400, 150), el);
+
+  if (textMenu instanceof Error) {
+    console.error(textMenu);
+    return;
+  }
+
+  menu.open(textMenu);
+
+  txtbox.initEventsHandler(textbox);
+
+  let pointerEvents = inputs.createPointerEvents(el);
+  let keyboardEvents = inputs.createKeyboardEvents();
 
   pointerEvents.subscribe("pointer", (pointerInput: inputs.PointerInput) => {
-   inputHandler.handlePointerInput(textbox, pointerInput)
-  })
+    inputHandler.handlePointerInput(pointerInput, textbox, {
+      areCoordsInside: (coords: vector.Vector2D) => {
+        return menu.areCoordsInside(coords, textMenu);
+      },
+      set: (textFormat: TextFormat & { align: TextAlignment }) => {
+        textMenu.set(textFormat);
+        return;
+      },
+    });
+  });
 
-  keyboardEvents.subscribe("key-down", (keyboardInput: inputs.KeyboardInput) => {
-    let key = keyboardInput.key
-    let modifiers = keyboardInput.modifiers
-    modifiers["Control"] = keyboardInput.modifiers["Control"]
-    modifiers["Shift"] = keyboardInput.modifiers["Shift"]
-    modifiers["Alt"] = keyboardInput.modifiers["Alt"]
-    modifiers["Meta"] = keyboardInput.modifiers["Meta"]
+  const keyDownDiv = document.getElementById("key") as HTMLDivElement;
+  keyboardEvents.subscribe(
+    "key-down",
+    (keyboardInput: inputs.KeyboardInput) => {
+      inputHandler.handleKeyboardInput(textbox, keyboardInput);
+      if(textbox.typing){
+      const key = getKeysDown(keyboardInput);
+        keyDownDiv.innerText = key;
+      }
+    },
+  );
 
-    if (textbox.typing) {
-      textbox.events.publish("type", {
-        key,
-        modifiers,
-        textFormat: undefined,
-      })
+  textMenu.events.subscribe("optionUpdate", (keys: string[]) => {
+    // #TODO: Arrows should also be typable
+    let textFormat: any = textMenu.get();
+
+    let tf: {
+      font?: string;
+      fontSize?: number;
+      fontColor?: string;
+      italic?: boolean;
+      bold?: boolean;
+      align?: string;
+    } = {};
+
+    for (let key of keys) {
+      if (key === "font") {
+        tf.font = textFormat.font;
+      }
+      if (key === "fontSize") {
+        tf.fontSize = textFormat.fontSize;
+      }
+      if (key === "fontColor") {
+        tf.fontColor = textFormat.fontColor;
+      }
+      if (key === "italic") {
+        tf.italic = textFormat.italic;
+      }
+      if (key === "bold") {
+        tf.bold = textFormat.bold;
+      }
+      if (key === "align") {
+        tf.align = textFormat.align;
+      }
     }
-  })
 
+    if (textbox.selectedTextPos.selected || tf.align !== undefined) {
+      txtbox.changeTextformat(
+        textbox,
+        textFormat,
+        textbox.selectedTextPos.posA,
+        textbox.selectedTextPos.posB,
+      );
+    }
 
-  // let r = rect.create({
-  //   center: vector.create(canvas.clientWidth / 2, canvas.clientHeight / 2),
-  //   width: 200,
-  //   height: textbox.height,
-  //   rotation: 0,
-  //   cornerRadii: SETTINGS.cornerRadii,
-  //   strokeColor: SETTINGS.strokeColor,
-  //   strokeWidth: SETTINGS.strokeWidth,
-  //   strokeStyle: "solid",
-  //   opacity: 1,
-  // })
+    if (textbox.textCursor !== null) {
+      txtbox.updateTextCursor(textbox, textFormat);
+    }
+  });
 
-  // let trArgs: TransformerProps = {
-  //   strokeColor: SETTINGS.transformer.strokeColor,
-  //   strokeWidth: SETTINGS.transformer.strokeWidth,
-  //   strokeStyle: "solid",
-  //   arcRadius: SETTINGS.transformer.radius,
-  //   squareRadius: SETTINGS.transformer.squareRadii,
-  //   squareSize: SETTINGS.transformer.squareSize,
-  //   gap: SETTINGS.transformer.gap,
-  //   padding: SETTINGS.transformer.padding,
-  //   edgeSize: SETTINGS.transformer.edgeSize,
-  //   rotationSpeed: SETTINGS.transformer.rotationSpeed,
-  // }
-
-  // transformer.attach(r, trArgs, cam)
-
-  // bind.anchorRegion.attach(r, {
-  //   fillColor: SETTINGS.anchor.regionColor,
-  //   opacity: SETTINGS.anchor.opacity,
-  //   cornerRadii: SETTINGS.cornerRadii,
-  //   gap: SETTINGS.anchor.regionGap,
-  //   stickiness: SETTINGS.anchor.stickiness,
-  //   duration: SETTINGS.anchor.duration,
-  // })
+  // slider to set the width (for debugging)
+  const slider = document.getElementById("slider") as HTMLInputElement;
 
   let mainLoop = renderer.startRenderLoop(
     ctx,
-    canvas,
     el,
     textbox,
+    textMenu,
     () => {},
-    true
-  )
+    true,
+  );
+
+  // debug
+  slider.addEventListener("input", () => {
+    txtbox.update(textbox, { width: Number(slider.value) });
+    txtbox.updateWrap(textbox);
+  });
+
+  function move(dx: number, dy: number) {
+    if (textbox instanceof Error) {
+      console.error(textbox)
+      return
+    }
+
+    if (textMenu instanceof Error) {
+      console.error(textMenu)
+      return
+    }
+
+    txtbox.drag(textbox, vector.create(dx, dy));
+    menu.drag(textMenu, vector.create(dx, dy));
+  }
+
+  let step = 20;
+  document
+    .getElementById("up")!
+    .addEventListener("click", () => move(0, -step));
+  document
+    .getElementById("down")!
+    .addEventListener("click", () => move(0, step));
+  document
+    .getElementById("left")!
+    .addEventListener("click", () => move(-step, 0));
+  document
+    .getElementById("right")!
+    .addEventListener("click", () => move(step, 0));
 }
 
-main()
+main();

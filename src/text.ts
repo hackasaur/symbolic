@@ -1,8 +1,8 @@
-import * as vector from "../utils/vector"
-import * as gl from "../utils/gl"
-import * as tex from "./tex"
-import * as geometry from "../utils/geometry"
-import { Vector2D } from "../utils/vector"
+import * as vector from "./utils/vector"
+import * as gl from "./utils/gl"
+// import * as tex from "./tex"
+import * as geometry from "./utils/geometry"
+import { Vector2D } from "./utils/vector"
 import { Easing, Tween } from "@tweenjs/tween.js"
 
 export interface TextCursor {

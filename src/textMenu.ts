@@ -1,10 +1,10 @@
 import * as vector from "./utils/vector.ts"
-import * as pnl from "./menu/panel.ts"
-import * as btn from "./menu/button.ts"
-import * as menu from "./menu/menu.ts"
-import * as arrange from "./menu/arrange.ts"
-import * as colorPalatte from "./menu/colorPalatte.ts"
-import { Menu } from "./menu/menu.ts"
+import * as pnl from "./utils/menu/panel.ts"
+import * as btn from "./utils/menu/button.ts"
+import * as menu from "./utils/menu/menu.ts"
+import * as arrange from "./utils/menu/arrange.ts"
+import * as colorPalatte from "./utils/menu/colorPalatte.ts"
+import { Menu } from "./utils/menu/menu.ts"
 import { Vector2D } from "./utils/vector.ts"
 import { SETTINGS } from "./settings.ts"
 
@@ -22,13 +22,13 @@ const create = (center: Vector2D, el: HTMLElement): Menu | Error => {
   // NOTE: spacing of buttons are not the same everywhere.
   // The font button is bigger than other buttons
   // Bold, Italic, Underline buttons don't have padding in between
-  let padding = SETTINGS.ui.contextMenu.textMenu.padding
+  let padding = SETTINGS.ui.textMenu.padding
   let buttonWidth = 30
   let buttonHeight = 30
   let panelWidth =
-    7 * (buttonWidth + SETTINGS.ui.contextMenu.textMenu.padding) - padding
-  let panelHeight = buttonHeight + +SETTINGS.ui.contextMenu.rectMenu.padding
-  let fontSize = SETTINGS.ui.contextMenu.textFormat.fontSize
+    7 * (buttonWidth + SETTINGS.ui.textMenu.padding) - padding
+  let panelHeight = buttonHeight + SETTINGS.ui.textMenu.padding
+  let fontSize = SETTINGS.ui.textMenu.textFormat.fontSize
 
   let base = pnl.create({
     id: "base",
@@ -36,16 +36,16 @@ const create = (center: Vector2D, el: HTMLElement): Menu | Error => {
     width: panelWidth,
     height: panelHeight,
     rotation: 0,
-    font: SETTINGS.ui.contextMenu.textFormat.font,
+    font: SETTINGS.ui.textFormat.font,
     fontSize: fontSize,
-    fontColor: SETTINGS.ui.contextMenu.textFormat.fontColor,
-    idleColor: SETTINGS.ui.contextMenu.panel.idleColor,
-    opacity: SETTINGS.ui.contextMenu.panel.opacity,
+    fontColor: SETTINGS.ui.textFormat.fontColor,
+    idleColor: SETTINGS.ui.panel.idleColor,
+    opacity: SETTINGS.ui.panel.opacity,
     hoverColor: "white",
     strokeWidth: 1,
     strokeColor: "black",
     padding: 10,
-    cornerRadii: SETTINGS.ui.contextMenu.button.cornerRadii,
+    cornerRadii: SETTINGS.ui.button.cornerRadii,
     label: "main",
     shadow: undefined,
   })
@@ -63,9 +63,9 @@ const create = (center: Vector2D, el: HTMLElement): Menu | Error => {
     rotation: 0,
     label: "Sans",
     font: {
-      font: SETTINGS.ui.contextMenu.textMenu.fonts.sans,
-      fontColor: SETTINGS.ui.contextMenu.textFormat.fontColor,
-      fontSize: SETTINGS.ui.contextMenu.textFormat.fontSize,
+      font: SETTINGS.ui.textMenu.fonts.sans,
+      fontColor: SETTINGS.ui.textMenu.textFormat.fontColor,
+      fontSize: SETTINGS.ui.textMenu.textFormat.fontSize,
       italic: false,
       bold: false,
     },
@@ -75,7 +75,7 @@ const create = (center: Vector2D, el: HTMLElement): Menu | Error => {
     toggledColor: "rgba(100,100,100,0.8)",
     opacity: 1,
     padding: padding,
-    cornerRadii: SETTINGS.ui.contextMenu.button.cornerRadii,
+    cornerRadii: SETTINGS.ui.button.cornerRadii,
   })
 
   if (fontBtn instanceof Error) {
@@ -88,16 +88,16 @@ const create = (center: Vector2D, el: HTMLElement): Menu | Error => {
     width: 2 * buttonWidth,
     height: 4 * (buttonHeight + padding / 2),
     rotation: 0,
-    font: SETTINGS.ui.contextMenu.textFormat.font,
-    fontSize: SETTINGS.ui.contextMenu.textFormat.fontSize,
+    font: SETTINGS.ui.textMenu.textFormat.font,
+    fontSize: SETTINGS.ui.textMenu.textFormat.fontSize,
     fontColor: "white",
-    idleColor: SETTINGS.ui.contextMenu.panel.idleColor,
-    opacity: SETTINGS.ui.contextMenu.panel.opacity,
+    idleColor: SETTINGS.ui.panel.idleColor,
+    opacity: SETTINGS.ui.panel.opacity,
     hoverColor: "white",
-    strokeWidth: SETTINGS.ui.contextMenu.panel.strokeWidth,
+    strokeWidth: SETTINGS.ui.panel.strokeWidth,
     strokeColor: "black",
-    padding: SETTINGS.ui.contextMenu.textMenu.padding,
-    cornerRadii: SETTINGS.ui.contextMenu.button.cornerRadii,
+    padding: SETTINGS.ui.textMenu.padding,
+    cornerRadii: SETTINGS.ui.button.cornerRadii,
     label: "fontPanel",
     shadow: undefined,
   })
@@ -114,9 +114,9 @@ const create = (center: Vector2D, el: HTMLElement): Menu | Error => {
     rotation: 0,
     label: "Sans",
     font: {
-      font: SETTINGS.ui.contextMenu.textMenu.fonts.sans,
-      fontColor: SETTINGS.ui.contextMenu.textFormat.fontColor,
-      fontSize: SETTINGS.ui.contextMenu.textMenu.fontSize.normal,
+      font: SETTINGS.ui.textMenu.fonts.sans,
+      fontColor: SETTINGS.ui.textMenu.textFormat.fontColor,
+      fontSize: SETTINGS.ui.textMenu.fontSize.normal,
       italic: false,
       bold: false,
     },
@@ -126,7 +126,7 @@ const create = (center: Vector2D, el: HTMLElement): Menu | Error => {
     toggledColor: "rgba(100,100,100,0.8)",
     opacity: 1,
     padding: 5,
-    cornerRadii: SETTINGS.ui.contextMenu.button.cornerRadii,
+    cornerRadii: SETTINGS.ui.button.cornerRadii,
   })
 
   if (sansFont instanceof Error) {
@@ -141,9 +141,9 @@ const create = (center: Vector2D, el: HTMLElement): Menu | Error => {
     rotation: 0,
     label: "Serif",
     font: {
-      font: SETTINGS.ui.contextMenu.textMenu.fonts.serif,
-      fontColor: SETTINGS.ui.contextMenu.textFormat.fontColor,
-      fontSize: SETTINGS.ui.contextMenu.textMenu.fontSize.normal,
+      font: SETTINGS.ui.textMenu.fonts.serif,
+      fontColor: SETTINGS.ui.textMenu.textFormat.fontColor,
+      fontSize: SETTINGS.ui.textMenu.fontSize.normal,
       italic: false,
       bold: false,
     },
@@ -153,7 +153,7 @@ const create = (center: Vector2D, el: HTMLElement): Menu | Error => {
     toggledColor: "rgba(100,100,100,0.8)",
     opacity: 1,
     padding: 5,
-    cornerRadii: SETTINGS.ui.contextMenu.button.cornerRadii,
+    cornerRadii: SETTINGS.ui.button.cornerRadii,
   })
 
   if (serifFont instanceof Error) {
@@ -168,9 +168,9 @@ const create = (center: Vector2D, el: HTMLElement): Menu | Error => {
     rotation: 0,
     label: "Code",
     font: {
-      font: SETTINGS.ui.contextMenu.textMenu.fonts.code,
-      fontColor: SETTINGS.ui.contextMenu.textFormat.fontColor,
-      fontSize: SETTINGS.ui.contextMenu.textMenu.fontSize.normal,
+      font: SETTINGS.ui.textMenu.fonts.code,
+      fontColor: SETTINGS.ui.textMenu.textFormat.fontColor,
+      fontSize: SETTINGS.ui.textMenu.fontSize.normal,
       italic: false,
       bold: false,
     },
@@ -180,7 +180,7 @@ const create = (center: Vector2D, el: HTMLElement): Menu | Error => {
     toggledColor: "rgba(100,100,100,0.8)",
     opacity: 1,
     padding: 5,
-    cornerRadii: SETTINGS.ui.contextMenu.button.cornerRadii,
+    cornerRadii: SETTINGS.ui.button.cornerRadii,
   })
 
   if (codeFont instanceof Error) {
@@ -195,9 +195,9 @@ const create = (center: Vector2D, el: HTMLElement): Menu | Error => {
     rotation: 0,
     label: "Hand",
     font: {
-      font: SETTINGS.ui.contextMenu.textMenu.fonts.hand,
-      fontColor: SETTINGS.ui.contextMenu.textFormat.fontColor,
-      fontSize: SETTINGS.ui.contextMenu.textMenu.fontSize.normal,
+      font: SETTINGS.ui.textMenu.fonts.hand,
+      fontColor: SETTINGS.ui.textMenu.textFormat.fontColor,
+      fontSize: SETTINGS.ui.textMenu.fontSize.normal,
       italic: false,
       bold: false,
     },
@@ -207,7 +207,7 @@ const create = (center: Vector2D, el: HTMLElement): Menu | Error => {
     toggledColor: "rgba(100,100,100,0.8)",
     opacity: 1,
     padding: 5,
-    cornerRadii: SETTINGS.ui.contextMenu.button.cornerRadii,
+    cornerRadii: SETTINGS.ui.button.cornerRadii,
   })
 
   if (handFont instanceof Error) {
@@ -262,8 +262,8 @@ const create = (center: Vector2D, el: HTMLElement): Menu | Error => {
     label: "N",
     font: {
       font: fontBtn.props.font.font,
-      fontColor: SETTINGS.ui.contextMenu.textFormat.fontColor,
-      fontSize: SETTINGS.ui.contextMenu.textFormat.fontSize,
+      fontColor: SETTINGS.ui.textMenu.textFormat.fontColor,
+      fontSize: SETTINGS.ui.textMenu.textFormat.fontSize,
       italic: false,
       bold: false,
     },
@@ -273,7 +273,7 @@ const create = (center: Vector2D, el: HTMLElement): Menu | Error => {
     toggledColor: "rgba(100,100,100,0.8)",
     opacity: 1,
     padding: 5,
-    cornerRadii: SETTINGS.ui.contextMenu.button.cornerRadii,
+    cornerRadii: SETTINGS.ui.button.cornerRadii,
   })
 
   if (fontSizeBtn instanceof Error) {
@@ -286,16 +286,16 @@ const create = (center: Vector2D, el: HTMLElement): Menu | Error => {
     width: buttonWidth + 2 * padding,
     height: 4 * (buttonHeight + padding),
     rotation: 0,
-    font: SETTINGS.ui.contextMenu.textFormat.font,
-    fontSize: SETTINGS.ui.contextMenu.textFormat.fontSize,
+    font: SETTINGS.ui.textMenu.textFormat.font,
+    fontSize: SETTINGS.ui.textMenu.textFormat.fontSize,
     fontColor: "white",
-    idleColor: SETTINGS.ui.contextMenu.panel.idleColor,
-    opacity: SETTINGS.ui.contextMenu.panel.opacity,
+    idleColor: SETTINGS.ui.panel.idleColor,
+    opacity: SETTINGS.ui.panel.opacity,
     hoverColor: "white",
-    strokeWidth: SETTINGS.ui.contextMenu.panel.strokeWidth,
+    strokeWidth: SETTINGS.ui.panel.strokeWidth,
     strokeColor: "black",
     padding: 10,
-    cornerRadii: SETTINGS.ui.contextMenu.button.cornerRadii,
+    cornerRadii: SETTINGS.ui.button.cornerRadii,
     label: "fontSizePanel",
     shadow: undefined,
   })
@@ -313,8 +313,8 @@ const create = (center: Vector2D, el: HTMLElement): Menu | Error => {
     label: "N",
     font: {
       font: fontBtn.props.font.font,
-      fontColor: SETTINGS.ui.contextMenu.textFormat.fontColor,
-      fontSize: SETTINGS.ui.contextMenu.textMenu.fontSize.normal,
+      fontColor: SETTINGS.ui.textMenu.textFormat.fontColor,
+      fontSize: SETTINGS.ui.textMenu.fontSize.normal,
       italic: false,
       bold: false,
     },
@@ -324,7 +324,7 @@ const create = (center: Vector2D, el: HTMLElement): Menu | Error => {
     toggledColor: "rgba(100,100,100,0.8)",
     opacity: 1,
     padding: 5,
-    cornerRadii: SETTINGS.ui.contextMenu.button.cornerRadii,
+    cornerRadii: SETTINGS.ui.button.cornerRadii,
   })
 
   if (normalText instanceof Error) {
@@ -340,8 +340,8 @@ const create = (center: Vector2D, el: HTMLElement): Menu | Error => {
     label: "H1",
     font: {
       font: fontBtn.props.font.font,
-      fontColor: SETTINGS.ui.contextMenu.textFormat.fontColor,
-      fontSize: SETTINGS.ui.contextMenu.textMenu.fontSize.heading1,
+      fontColor: SETTINGS.ui.textMenu.textFormat.fontColor,
+      fontSize: SETTINGS.ui.textMenu.fontSize.heading1,
       italic: false,
       bold: false,
     },
@@ -351,7 +351,7 @@ const create = (center: Vector2D, el: HTMLElement): Menu | Error => {
     toggledColor: "rgba(100,100,100,0.8)",
     opacity: 1,
     padding: 5,
-    cornerRadii: SETTINGS.ui.contextMenu.button.cornerRadii,
+    cornerRadii: SETTINGS.ui.button.cornerRadii,
   })
 
   if (heading1 instanceof Error) {
@@ -367,8 +367,8 @@ const create = (center: Vector2D, el: HTMLElement): Menu | Error => {
     label: "H2",
     font: {
       font: fontBtn.props.font.font,
-      fontColor: SETTINGS.ui.contextMenu.textFormat.fontColor,
-      fontSize: SETTINGS.ui.contextMenu.textMenu.fontSize.heading2,
+      fontColor: SETTINGS.ui.textMenu.textFormat.fontColor,
+      fontSize: SETTINGS.ui.textMenu.fontSize.heading2,
       italic: false,
       bold: false,
     },
@@ -378,7 +378,7 @@ const create = (center: Vector2D, el: HTMLElement): Menu | Error => {
     toggledColor: "rgba(100,100,100,0.8)",
     opacity: 1,
     padding: 5,
-    cornerRadii: SETTINGS.ui.contextMenu.button.cornerRadii,
+    cornerRadii: SETTINGS.ui.button.cornerRadii,
   })
 
   if (heading2 instanceof Error) {
@@ -394,8 +394,8 @@ const create = (center: Vector2D, el: HTMLElement): Menu | Error => {
     label: "H3",
     font: {
       font: fontBtn.props.font.font,
-      fontColor: SETTINGS.ui.contextMenu.textFormat.fontColor,
-      fontSize: SETTINGS.ui.contextMenu.textMenu.fontSize.heading3,
+      fontColor: SETTINGS.ui.textMenu.textFormat.fontColor,
+      fontSize: SETTINGS.ui.textMenu.fontSize.heading3,
       italic: false,
       bold: false,
     },
@@ -405,7 +405,7 @@ const create = (center: Vector2D, el: HTMLElement): Menu | Error => {
     toggledColor: "rgba(100,100,100,0.8)",
     opacity: 1,
     padding: 5,
-    cornerRadii: SETTINGS.ui.contextMenu.button.cornerRadii,
+    cornerRadii: SETTINGS.ui.button.cornerRadii,
   })
 
   if (heading3 instanceof Error) {
@@ -458,8 +458,8 @@ const create = (center: Vector2D, el: HTMLElement): Menu | Error => {
     label: "B",
     font: {
       font: fontBtn.props.font.font,
-      fontColor: SETTINGS.ui.contextMenu.textFormat.fontColor,
-      fontSize: SETTINGS.ui.contextMenu.textFormat.fontSize,
+      fontColor: SETTINGS.ui.textMenu.textFormat.fontColor,
+      fontSize: SETTINGS.ui.textMenu.textFormat.fontSize,
       italic: false,
       bold: true,
     },
@@ -469,7 +469,7 @@ const create = (center: Vector2D, el: HTMLElement): Menu | Error => {
     toggledColor: "rgba(100,100,100,0.8)",
     opacity: 1,
     padding,
-    cornerRadii: SETTINGS.ui.contextMenu.button.cornerRadii,
+    cornerRadii: SETTINGS.ui.button.cornerRadii,
   })
 
   if (bold instanceof Error) {
@@ -485,8 +485,8 @@ const create = (center: Vector2D, el: HTMLElement): Menu | Error => {
     label: "I",
     font: {
       font: fontBtn.props.font.font,
-      fontColor: SETTINGS.ui.contextMenu.textFormat.fontColor,
-      fontSize: SETTINGS.ui.contextMenu.textFormat.fontSize,
+      fontColor: SETTINGS.ui.textMenu.textFormat.fontColor,
+      fontSize: SETTINGS.ui.textMenu.textFormat.fontSize,
       italic: true,
       bold: false,
     },
@@ -496,7 +496,7 @@ const create = (center: Vector2D, el: HTMLElement): Menu | Error => {
     toggledColor: "rgba(100,100,100,0.8)",
     opacity: 1,
     padding,
-    cornerRadii: SETTINGS.ui.contextMenu.button.cornerRadii,
+    cornerRadii: SETTINGS.ui.button.cornerRadii,
   })
 
   if (italic instanceof Error) {
@@ -512,8 +512,8 @@ const create = (center: Vector2D, el: HTMLElement): Menu | Error => {
     label: "U",
     font: {
       font: fontBtn.props.font.font,
-      fontColor: SETTINGS.ui.contextMenu.textFormat.fontColor,
-      fontSize: SETTINGS.ui.contextMenu.textFormat.fontSize,
+      fontColor: SETTINGS.ui.textMenu.textFormat.fontColor,
+      fontSize: SETTINGS.ui.textMenu.textFormat.fontSize,
       italic: false,
       bold: false,
     },
@@ -523,7 +523,7 @@ const create = (center: Vector2D, el: HTMLElement): Menu | Error => {
     toggledColor: "rgba(100,100,100,0.8)",
     opacity: 1,
     padding: 5,
-    cornerRadii: SETTINGS.ui.contextMenu.button.cornerRadii,
+    cornerRadii: SETTINGS.ui.button.cornerRadii,
   })
 
   if (underline instanceof Error) {
@@ -568,16 +568,16 @@ const create = (center: Vector2D, el: HTMLElement): Menu | Error => {
   let palatteButton = colorPalatte.create(
     "palatte",
     vector.create(0, 0),
-    SETTINGS.ui.contextMenu.menuGap,
-    SETTINGS.ui.contextMenu.palatte.hues,
-    SETTINGS.ui.contextMenu.palatte.shades,
-    SETTINGS.ui.contextMenu.palatte.padding,
-    SETTINGS.ui.contextMenu.palatte.strokeColor,
-    SETTINGS.ui.contextMenu.palatte.strokeWidth,
-    SETTINGS.ui.contextMenu.panel.idleColor,
-    SETTINGS.ui.contextMenu.panel.opacity,
-    SETTINGS.ui.contextMenu.palatte.palatteBtnDims,
-    SETTINGS.ui.contextMenu.palatte.colorButtonDims,
+    SETTINGS.ui.menu.gap,
+    SETTINGS.ui.palatte.hues,
+    SETTINGS.ui.palatte.shades,
+    SETTINGS.ui.palatte.padding,
+    SETTINGS.ui.palatte.strokeColor,
+    SETTINGS.ui.palatte.strokeWidth,
+    SETTINGS.ui.panel.idleColor,
+    SETTINGS.ui.panel.opacity,
+    SETTINGS.ui.palatte.palatteBtnDims,
+    SETTINGS.ui.palatte.colorButtonDims,
     el
   )
 
@@ -601,11 +601,11 @@ const create = (center: Vector2D, el: HTMLElement): Menu | Error => {
     width: buttonWidth,
     height: buttonHeight,
     rotation: 0,
-    label: SETTINGS.ui.contextMenu.textMenu.alignment.left,
+    label: SETTINGS.ui.textMenu.alignment.left,
     font: {
-      font: SETTINGS.ui.contextMenu.textFormat.font,
-      fontColor: SETTINGS.ui.contextMenu.textFormat.fontColor,
-      fontSize: SETTINGS.ui.contextMenu.textFormat.fontSize,
+      font: SETTINGS.ui.textMenu.textFormat.font,
+      fontColor: SETTINGS.ui.textMenu.textFormat.fontColor,
+      fontSize: SETTINGS.ui.textMenu.textFormat.fontSize,
       italic: false,
       bold: false,
     },
@@ -615,7 +615,7 @@ const create = (center: Vector2D, el: HTMLElement): Menu | Error => {
     toggledColor: "rgba(100,100,100,0.8)",
     opacity: 1,
     padding,
-    cornerRadii: SETTINGS.ui.contextMenu.button.cornerRadii, //SETTINGS.ui.contextMenu.button.cornerRadii,
+    cornerRadii: SETTINGS.ui.button.cornerRadii, //SETTINGS.ui.button.cornerRadii,
   })
 
   if (textAlignBtn instanceof Error) {
@@ -628,16 +628,16 @@ const create = (center: Vector2D, el: HTMLElement): Menu | Error => {
     width: buttonWidth + padding,
     height: 3 * (buttonHeight + padding),
     rotation: 0,
-    font: SETTINGS.ui.contextMenu.textFormat.font,
-    fontSize: SETTINGS.ui.contextMenu.textFormat.fontSize,
+    font: SETTINGS.ui.textMenu.textFormat.font,
+    fontSize: SETTINGS.ui.textMenu.textFormat.fontSize,
     fontColor: "white",
-    idleColor: SETTINGS.ui.contextMenu.panel.idleColor,
-    opacity: SETTINGS.ui.contextMenu.panel.opacity,
+    idleColor: SETTINGS.ui.panel.idleColor,
+    opacity: SETTINGS.ui.panel.opacity,
     hoverColor: "white",
-    strokeWidth: SETTINGS.ui.contextMenu.panel.strokeWidth,
+    strokeWidth: SETTINGS.ui.panel.strokeWidth,
     strokeColor: "black",
     padding: 10,
-    cornerRadii: SETTINGS.ui.contextMenu.button.cornerRadii,
+    cornerRadii: SETTINGS.ui.button.cornerRadii,
     label: "fontSizePanel",
     shadow: undefined,
   })
@@ -652,11 +652,11 @@ const create = (center: Vector2D, el: HTMLElement): Menu | Error => {
     width: buttonWidth,
     height: buttonHeight,
     rotation: 0,
-    label: SETTINGS.ui.contextMenu.textMenu.alignment.left,
+    label: SETTINGS.ui.textMenu.alignment.left,
     font: {
       font: fontBtn.props.font.font,
-      fontColor: SETTINGS.ui.contextMenu.textFormat.fontColor,
-      fontSize: SETTINGS.ui.contextMenu.textFormat.fontSize,
+      fontColor: SETTINGS.ui.textMenu.textFormat.fontColor,
+      fontSize: SETTINGS.ui.textMenu.textFormat.fontSize,
       italic: false,
       bold: false,
     },
@@ -666,7 +666,7 @@ const create = (center: Vector2D, el: HTMLElement): Menu | Error => {
     toggledColor: "rgba(100,100,100,0.8)",
     opacity: 1,
     padding: 5,
-    cornerRadii: SETTINGS.ui.contextMenu.button.cornerRadii,
+    cornerRadii: SETTINGS.ui.button.cornerRadii,
   })
 
   if (leftAlign instanceof Error) {
@@ -679,11 +679,11 @@ const create = (center: Vector2D, el: HTMLElement): Menu | Error => {
     width: buttonWidth,
     height: buttonHeight,
     rotation: 0,
-    label: SETTINGS.ui.contextMenu.textMenu.alignment.center,
+    label: SETTINGS.ui.textMenu.alignment.center,
     font: {
-      font: SETTINGS.ui.contextMenu.textFormat.font,
-      fontColor: SETTINGS.ui.contextMenu.textFormat.fontColor,
-      fontSize: SETTINGS.ui.contextMenu.textFormat.fontSize,
+      font: SETTINGS.ui.textMenu.textFormat.font,
+      fontColor: SETTINGS.ui.textMenu.textFormat.fontColor,
+      fontSize: SETTINGS.ui.textMenu.textFormat.fontSize,
       italic: false,
       bold: false,
     },
@@ -693,7 +693,7 @@ const create = (center: Vector2D, el: HTMLElement): Menu | Error => {
     toggledColor: "rgba(100,100,100,0.8)",
     opacity: 1,
     padding: 5,
-    cornerRadii: SETTINGS.ui.contextMenu.button.cornerRadii,
+    cornerRadii: SETTINGS.ui.button.cornerRadii,
   })
 
   if (centerAlign instanceof Error) {
@@ -706,11 +706,11 @@ const create = (center: Vector2D, el: HTMLElement): Menu | Error => {
     width: buttonWidth,
     height: buttonHeight,
     rotation: 0,
-    label: SETTINGS.ui.contextMenu.textMenu.alignment.right,
+    label: SETTINGS.ui.textMenu.alignment.right,
     font: {
       font: fontBtn.props.font.font,
-      fontColor: SETTINGS.ui.contextMenu.textFormat.fontColor,
-      fontSize: SETTINGS.ui.contextMenu.textFormat.fontSize,
+      fontColor: SETTINGS.ui.textMenu.textFormat.fontColor,
+      fontSize: SETTINGS.ui.textMenu.textFormat.fontSize,
       italic: false,
       bold: false,
     },
@@ -720,7 +720,7 @@ const create = (center: Vector2D, el: HTMLElement): Menu | Error => {
     toggledColor: "rgba(100,100,100,0.8)",
     opacity: 1,
     padding: 5,
-    cornerRadii: SETTINGS.ui.contextMenu.button.cornerRadii,
+    cornerRadii: SETTINGS.ui.button.cornerRadii,
   })
 
   if (rightAlign instanceof Error) {
@@ -775,9 +775,9 @@ const create = (center: Vector2D, el: HTMLElement): Menu | Error => {
   // set/get
   const set = (props: textMenuProps): void | Error => {
     switch (props.font) {
-      case SETTINGS.ui.contextMenu.textMenu.fonts.sans: {
+      case SETTINGS.ui.textMenu.fonts.sans: {
         let textFormat = { ...fontBtn.props.font }
-        textFormat.font = SETTINGS.ui.contextMenu.textMenu.fonts.sans
+        textFormat.font = SETTINGS.ui.textMenu.fonts.sans
 
         btn.update(fontBtn, {
           label: "Sans",
@@ -788,9 +788,9 @@ const create = (center: Vector2D, el: HTMLElement): Menu | Error => {
         break
       }
 
-      case SETTINGS.ui.contextMenu.textMenu.fonts.serif: {
+      case SETTINGS.ui.textMenu.fonts.serif: {
         let textFormat = { ...fontBtn.props.font }
-        textFormat.font = SETTINGS.ui.contextMenu.textMenu.fonts.serif
+        textFormat.font = SETTINGS.ui.textMenu.fonts.serif
 
         btn.update(fontBtn, {
           label: "Serif",
@@ -801,9 +801,9 @@ const create = (center: Vector2D, el: HTMLElement): Menu | Error => {
         break
       }
 
-      case SETTINGS.ui.contextMenu.textMenu.fonts.code: {
+      case SETTINGS.ui.textMenu.fonts.code: {
         let textFormat = { ...fontBtn.props.font }
-        textFormat.font = SETTINGS.ui.contextMenu.textMenu.fonts.code
+        textFormat.font = SETTINGS.ui.textMenu.fonts.code
 
         btn.update(fontBtn, {
           label: "Code",
@@ -813,9 +813,9 @@ const create = (center: Vector2D, el: HTMLElement): Menu | Error => {
         break
       }
 
-      case SETTINGS.ui.contextMenu.textMenu.fonts.hand: {
+      case SETTINGS.ui.textMenu.fonts.hand: {
         let textFormat = { ...fontBtn.props.font }
-        textFormat.font = SETTINGS.ui.contextMenu.textMenu.fonts.hand
+        textFormat.font = SETTINGS.ui.textMenu.fonts.hand
 
         btn.update(fontBtn, {
           label: "Hand",
@@ -829,19 +829,19 @@ const create = (center: Vector2D, el: HTMLElement): Menu | Error => {
 
     // fontSize size
     switch (props.fontSize) {
-      case SETTINGS.ui.contextMenu.textMenu.fontSize.normal:
+      case SETTINGS.ui.textMenu.fontSize.normal:
         btn.update(fontSizeBtn, { label: "N" })
         btn.switchTo([normalText, heading1, heading2, heading3], normalText)
         break
-      case SETTINGS.ui.contextMenu.textMenu.fontSize.heading3:
+      case SETTINGS.ui.textMenu.fontSize.heading3:
         btn.update(fontSizeBtn, { label: "H3" })
         btn.switchTo([normalText, heading1, heading2, heading3], heading3)
         break
-      case SETTINGS.ui.contextMenu.textMenu.fontSize.heading2:
+      case SETTINGS.ui.textMenu.fontSize.heading2:
         btn.update(fontSizeBtn, { label: "H2" })
         btn.switchTo([normalText, heading1, heading2, heading3], heading2)
         break
-      case SETTINGS.ui.contextMenu.textMenu.fontSize.heading1:
+      case SETTINGS.ui.textMenu.fontSize.heading1:
         btn.update(fontSizeBtn, { label: "H1" })
         btn.switchTo([normalText, heading1, heading2, heading3], heading1)
         break
@@ -872,7 +872,7 @@ const create = (center: Vector2D, el: HTMLElement): Menu | Error => {
         let textFormat = { ...fontBtn.props.font }
 
         btn.update(textAlignBtn, {
-          label: SETTINGS.ui.contextMenu.textMenu.alignment.left,
+          label: SETTINGS.ui.textMenu.alignment.left,
           font: textFormat,
         })
 
@@ -884,7 +884,7 @@ const create = (center: Vector2D, el: HTMLElement): Menu | Error => {
         let textFormat = { ...fontBtn.props.font }
 
         btn.update(textAlignBtn, {
-          label: SETTINGS.ui.contextMenu.textMenu.alignment.center,
+          label: SETTINGS.ui.textMenu.alignment.center,
           font: textFormat,
         })
 
@@ -896,7 +896,7 @@ const create = (center: Vector2D, el: HTMLElement): Menu | Error => {
         let textFormat = { ...fontBtn.props.font }
 
         btn.update(textAlignBtn, {
-          label: SETTINGS.ui.contextMenu.textMenu.alignment.right,
+          label: SETTINGS.ui.textMenu.alignment.right,
           font: textFormat,
         })
 
@@ -919,9 +919,9 @@ const create = (center: Vector2D, el: HTMLElement): Menu | Error => {
 
   const get = (): textMenuProps | Error => {
     let props: textMenuProps = {
-      font: SETTINGS.ui.contextMenu.textMenu.fonts.hand,
-      fontSize: SETTINGS.ui.contextMenu.textMenu.fontSize.normal,
-      fontColor: SETTINGS.ui.contextMenu.textFormat.fontColor,
+      font: SETTINGS.ui.textMenu.fonts.hand,
+      fontSize: SETTINGS.ui.textMenu.fontSize.normal,
+      fontColor: SETTINGS.ui.textMenu.textFormat.fontColor,
       bold: false,
       italic: false,
       align: "Left",
@@ -929,16 +929,16 @@ const create = (center: Vector2D, el: HTMLElement): Menu | Error => {
 
     switch (fontBtn.props.label) {
       case "Sans":
-        props.font = SETTINGS.ui.contextMenu.textMenu.fonts.sans
+        props.font = SETTINGS.ui.textMenu.fonts.sans
         break
       case "Serif":
-        props.font = SETTINGS.ui.contextMenu.textMenu.fonts.serif
+        props.font = SETTINGS.ui.textMenu.fonts.serif
         break
       case "Code":
-        props.font = SETTINGS.ui.contextMenu.textMenu.fonts.code
+        props.font = SETTINGS.ui.textMenu.fonts.code
         break
       case "Hand":
-        props.font = SETTINGS.ui.contextMenu.textMenu.fonts.hand
+        props.font = SETTINGS.ui.textMenu.fonts.hand
         break
       default:
         return new Error("Invalid font size")
@@ -946,16 +946,16 @@ const create = (center: Vector2D, el: HTMLElement): Menu | Error => {
 
     switch (fontSizeBtn.props.label) {
       case "N":
-        props.fontSize = SETTINGS.ui.contextMenu.textMenu.fontSize.normal
+        props.fontSize = SETTINGS.ui.textMenu.fontSize.normal
         break
       case "H3":
-        props.fontSize = SETTINGS.ui.contextMenu.textMenu.fontSize.heading3
+        props.fontSize = SETTINGS.ui.textMenu.fontSize.heading3
         break
       case "H2":
-        props.fontSize = SETTINGS.ui.contextMenu.textMenu.fontSize.heading2
+        props.fontSize = SETTINGS.ui.textMenu.fontSize.heading2
         break
       case "H1":
-        props.fontSize = SETTINGS.ui.contextMenu.textMenu.fontSize.heading1
+        props.fontSize = SETTINGS.ui.textMenu.fontSize.heading1
         break
       default:
         return new Error("Invalid font size")
@@ -966,13 +966,13 @@ const create = (center: Vector2D, el: HTMLElement): Menu | Error => {
     props.italic = italic.toggled
 
     switch (textAlignBtn.props.label) {
-      case SETTINGS.ui.contextMenu.textMenu.alignment.left:
+      case SETTINGS.ui.textMenu.alignment.left:
         props.align = "Left"
         break
-      case SETTINGS.ui.contextMenu.textMenu.alignment.right:
+      case SETTINGS.ui.textMenu.alignment.right:
         props.align = "Right"
         break
-      case SETTINGS.ui.contextMenu.textMenu.alignment.center:
+      case SETTINGS.ui.textMenu.alignment.center:
         props.align = "Center"
         break
       default:
@@ -987,7 +987,7 @@ const create = (center: Vector2D, el: HTMLElement): Menu | Error => {
   sansFont.events.subscribe("clicked", () => {
     btn.switchTo([sansFont, serifFont, codeFont, handFont], sansFont)
     let textFormat = { ...fontBtn.props.font }
-    textFormat.font = SETTINGS.ui.contextMenu.textMenu.fonts.sans
+    textFormat.font = SETTINGS.ui.textMenu.fonts.sans
 
     btn.update(fontBtn, {
       label: "Sans",
@@ -1000,7 +1000,7 @@ const create = (center: Vector2D, el: HTMLElement): Menu | Error => {
   serifFont.events.subscribe("clicked", () => {
     btn.switchTo([sansFont, serifFont, codeFont, handFont], serifFont)
     let textFormat = { ...fontBtn.props.font }
-    textFormat.font = SETTINGS.ui.contextMenu.textMenu.fonts.serif
+    textFormat.font = SETTINGS.ui.textMenu.fonts.serif
 
     btn.update(fontBtn, {
       label: "Serif",
@@ -1013,7 +1013,7 @@ const create = (center: Vector2D, el: HTMLElement): Menu | Error => {
   codeFont.events.subscribe("clicked", () => {
     btn.switchTo([sansFont, serifFont, codeFont, handFont], codeFont)
     let textFormat = { ...fontBtn.props.font }
-    textFormat.font = SETTINGS.ui.contextMenu.textMenu.fonts.code
+    textFormat.font = SETTINGS.ui.textMenu.fonts.code
 
     btn.update(fontBtn, {
       label: "Code",
@@ -1026,7 +1026,7 @@ const create = (center: Vector2D, el: HTMLElement): Menu | Error => {
   handFont.events.subscribe("clicked", () => {
     btn.switchTo([sansFont, serifFont, codeFont, handFont], handFont)
     let textFormat = { ...fontBtn.props.font }
-    textFormat.font = SETTINGS.ui.contextMenu.textMenu.fonts.hand
+    textFormat.font = SETTINGS.ui.textMenu.fonts.hand
 
     btn.update(fontBtn, {
       label: "Hand",
@@ -1044,15 +1044,15 @@ const create = (center: Vector2D, el: HTMLElement): Menu | Error => {
       })
 
       let tf = { ...textFormat }
-      tf.fontSize = SETTINGS.ui.contextMenu.textMenu.fontSize.normal
+      tf.fontSize = SETTINGS.ui.textMenu.fontSize.normal
       btn.update(normalText, { font: tf })
       tf = { ...textFormat }
-      tf.fontSize = SETTINGS.ui.contextMenu.textMenu.fontSize.heading1
+      tf.fontSize = SETTINGS.ui.textMenu.fontSize.heading1
       btn.update(heading1, { font: tf })
       tf = { ...textFormat }
-      tf.fontSize = SETTINGS.ui.contextMenu.textMenu.fontSize.heading2
+      tf.fontSize = SETTINGS.ui.textMenu.fontSize.heading2
       btn.update(heading2, { font: tf })
-      tf.fontSize = SETTINGS.ui.contextMenu.textMenu.fontSize.heading3
+      tf.fontSize = SETTINGS.ui.textMenu.fontSize.heading3
       btn.update(heading3, { font: tf })
 
       tf = { ...textFormat }
@@ -1122,7 +1122,7 @@ const create = (center: Vector2D, el: HTMLElement): Menu | Error => {
     // #FIX: switchTo isn't working
     btn.switchTo([leftAlign, centerAlign, rightAlign], leftAlign)
     btn.update(textAlignBtn, {
-      label: SETTINGS.ui.contextMenu.textMenu.alignment.left,
+      label: SETTINGS.ui.textMenu.alignment.left,
     })
     textMenu.events.publish("optionUpdate", ["align"])
   })
@@ -1131,7 +1131,7 @@ const create = (center: Vector2D, el: HTMLElement): Menu | Error => {
     // #FIX: switchTo isn't working
     btn.switchTo([leftAlign, centerAlign, rightAlign], rightAlign)
     btn.update(textAlignBtn, {
-      label: SETTINGS.ui.contextMenu.textMenu.alignment.right,
+      label: SETTINGS.ui.textMenu.alignment.right,
     })
     textMenu.events.publish("optionUpdate", ["align"])
   })
@@ -1140,7 +1140,7 @@ const create = (center: Vector2D, el: HTMLElement): Menu | Error => {
     // #FIX: switchTo isn't working
     btn.switchTo([leftAlign, centerAlign, rightAlign], centerAlign)
     btn.update(textAlignBtn, {
-      label: SETTINGS.ui.contextMenu.textMenu.alignment.center,
+      label: SETTINGS.ui.textMenu.alignment.center,
     })
 
     textMenu.events.publish("optionUpdate", ["align"])

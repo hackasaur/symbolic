@@ -1,5 +1,8 @@
 import * as vector from "./utils/vector.ts"
-import * as txtbox from "./text/textbox.ts"
+import * as txtbox from "./textbox.ts"
+import * as txtMenu from "./textMenu.ts"
+import * as menu from "./utils/menu/menu.ts"
+import { Menu } from "./utils/menu/menu.ts"
 import * as gl from "./utils/gl.ts"
 import { pointerDebugger, createMonitor, debugCtx2D } from "./utils/debug.ts"
 
@@ -12,9 +15,9 @@ export interface RenderLoop {
 
 const startRenderLoop = (
   ctx: CanvasRenderingContext2D,
-  canvas: HTMLCanvasElement,
   el: HTMLElement,
   textbox: txtbox.Textbox,
+  textMenu?: Menu,
   callback?: (timestamp: number) => void,
   debug?: boolean
 ): RenderLoop => {
@@ -24,13 +27,11 @@ const startRenderLoop = (
     frametime: 16,
     debug: debug ? true : false,
   }
-
   let pointer_debug = pointerDebugger(ctx, el, 3, "yellow")
-
   let frameRateMonitor = createMonitor(
     ctx,
-    vector.create(canvas.width - 200, 100),
-    100, // width
+    vector.create(ctx.canvas.width/gl.DPR() - 200, 100),
+    150, // width
     1, // scale
     200, // shiftTime
     (1 / 60) * 10 ** 3, // baseline (~16 ms for 60Hz)
@@ -51,9 +52,11 @@ const startRenderLoop = (
       return loop
     }
 
-    ctx.clearRect(0, 0, canvas.width, canvas.height)
-
+    ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height)
     txtbox.draw(ctx, textbox)
+    if (textMenu !== undefined) {
+      menu.draw(ctx, textMenu)
+    }
 
     if (callback) {
       callback(timestamp)
@@ -70,43 +73,12 @@ const startRenderLoop = (
 
       // frame time monitor
       frameRateMonitor.stream(frameTime)
-      frameRateMonitor.coords.x = canvas.width/2 - 200
-      frameRateMonitor.coords.y = 100
+      // frameRateMonitor.coords.x = ctx.canvas.width/2 - 200
+      // frameRateMonitor.coords.y = 100
       frameRateMonitor.update()
-
       frameRateMonitor.draw()
-
       pointer_debug.draw()
     }
-
-
-    gl.fillText(
-      ctx,
-      vector.create(0, 40),
-      `x: ${Math.round(pointerCoords.x)}`,
-      1,
-      {
-        font: "Arial",
-        fontSize: 20,
-        fontColor: "white",
-        italic: false,
-        bold: false,
-      }
-    )
-
-    gl.fillText(
-      ctx,
-      vector.create(0, 65),
-      `y: ${Math.round(pointerCoords.y)}`,
-      1,
-      {
-        font: "Arial",
-        fontSize: 20,
-        fontColor: "white",
-        italic: false,
-        bold: false,
-      }
-    )
 
     requestAnimationFrame(renderloop)
   }

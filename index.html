@@ -27,7 +27,17 @@
   <!--<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>-->
 
   <body>
-    <div id="math"></div>
+    <!--<div id="math"></div>-->
+    <div style="display: flex; flex-direction: row; gap: 10px">
+        <div class="controls">
+            <button id="up">↑</button>
+            <button id="down">↓</button>
+            <button id="left">←</button>
+            <button id="right">→</button>
+        </div>
+        <input type="range" id="slider" min="0" max="1000" value="200">
+        <div id="key" style="color:white; font-size: 15px;">⌨</div>
+    </div>
     <div id="canvas-container">
       <canvas id="scene"></canvas>
       <canvas id="background"></canvas>

@@ -2,15 +2,15 @@
  * textbox related stuff...
  */
 
-import * as vector from "../utils/vector.ts"
-import * as geometry from "../utils/geometry.ts"
-import * as gl from "../utils/gl.ts"
+import * as vector from "./utils/vector.ts"
+import * as geometry from "./utils/geometry.ts"
+import * as gl from "./utils/gl.ts"
 import * as txt from "./text.ts"
-import * as inputs from "../utils/inputs.ts"
-import { updateObject } from "../utils/misc.ts"
-import { Vector2D } from "../utils/vector.ts"
-import { PubSub, pubSub } from "../utils/pubsub.ts"
-import { ModifierKeys } from "../utils/inputs.ts"
+import * as inputs from "./utils/inputs.ts"
+import { updateObject } from "./utils/misc.ts"
+import { Vector2D } from "./utils/vector.ts"
+import { PubSub, pubSub } from "./utils/pubsub.ts"
+import { ModifierKeys } from "./utils/inputs.ts"
 import {
   TextCursor,
   RichTextInfo,
@@ -18,7 +18,7 @@ import {
   TextAlignment,
   TextFormat,
 } from "./text.ts"
-import { SETTINGS } from "../../settings.js"
+import { SETTINGS } from "./settings.ts"
 
 export interface TextFieldProps {
   center: Vector2D
@@ -1354,11 +1354,6 @@ const initEventHandler = (textfield: Textfield, debug?: boolean) => {
         textCursor.resetBlinkCycle()
       } else if (key === "Enter") {
         if (textIsSelected) {
-          // let { start } = txt.sortLineNoPositions(
-          //   textbox.selectedTextPos.posA,
-          //   textbox.selectedTextPos.posB
-          // )
-
           remove(
             textfield.selectedTextPos.posA,
             textfield.selectedTextPos.posB,

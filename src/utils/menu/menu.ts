@@ -1,14 +1,14 @@
-import * as vector from "../utils/vector.ts"
+import * as vector from "../vector.ts"
 import * as pnl from "./panel.ts"
 import * as btn from "./button.ts"
-import * as anim from "../utils/anim.ts"
-import * as inputs from "../utils/inputs.ts"
-import { updateObject } from "../utils/misc"
+import * as anim from "../anim.ts"
+import * as inputs from "../inputs.ts"
+import { updateObject } from "../misc.ts"
 import { Panel } from "./panel.ts"
 import { Button } from "./button.ts"
 import { Easing, Tween, Group } from "@tweenjs/tween.js"
-import { pubSub, PubSub } from "../utils/pubsub.ts"
-import { Vector2D } from "../utils/vector.ts"
+import { pubSub, PubSub } from "../pubsub.ts"
+import { Vector2D } from "../vector.ts"
 import { SETTINGS } from "../../settings.ts"
 
 export interface Menu {
@@ -437,7 +437,7 @@ const closeInstant = (panel: Panel) => {
   return
 }
 
-const areCoordsInside = (menu: Menu, coords: Vector2D): boolean => {
+const areCoordsInside = (coords: Vector2D, menu: Menu): boolean => {
   const elements = allElementsById(menu)
   for (let id in elements) {
     let element = elements[id]

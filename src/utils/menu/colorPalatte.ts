@@ -1,13 +1,13 @@
 import tinycolor from "tinycolor2"
 import * as pnl from "./panel.ts"
 import * as btn from "./button.ts"
-import * as vector from "../utils/vector.ts"
+import * as vector from "../vector.ts"
 import * as arrange from "./arrange.ts"
-import { Vector2D } from "../utils/vector.ts"
+import { Vector2D } from "../vector.ts"
 import { Panel } from "./panel.ts"
-import { Rectangle } from "../utils/geometry.ts"
+import { Rectangle } from "../geometry.ts"
 import { Button } from "./button.ts"
-import { debugCtx2D, showPoint } from "../utils/debug.ts"
+import { debugCtx2D, showPoint } from "../debug.ts"
 
 export interface ColorRgba {
   r: number

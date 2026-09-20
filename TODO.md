@@ -1,0 +1,49 @@
+## TODO
+- [ ] scrollable
+- [ ] undo/redo
+- [ ] underline
+- [ ] highlight
+- [ ] formatting bar for rich text formatting
+- [ ] modifer key shortcuts:
+  - [x] ctrl + arrow,
+  - [x] shift + (ctrl) + arrow,
+  - [x] copy/paste/cut (ctrl + c/v/x)
+  - [x] ctrl + a (select all)
+  - [x] ctrl + b (bold)
+  - [x] ctrl + i (italic)
+  - [ ] ctrl + u (underline)
+  - [ ] ctrl + z/r (undo/redo)
+- [ ] tab indentation
+- [x] height of textBox should be expandable (while creating/modifying). text should move to the center
+- [x] text alignment
+- [x] typing mode
+- [x] text selection with pointer/keyboard.
+- [x] delete
+- [x] backspace, new line, arrow up, down, left, right
+- [x] rich text
+- [x] type text
+- [x] word wrap 
+- [x] last word breaking
+- [x] the order of RichTextInfos must be checked
+- [ ] text cursor height should be equal to the line height for that text format 
+- [ ] urls should be in blue font in textbox
+- [ ] animations for text like 3b1b 
+- [ ] format painter
+- [ ] IME support
+
+# bugs
+- [ ] height of the textbox changes slightly when font color is changed 
+  - updateTextboxShape() is called when ever there is a change in font 
+- [ ] copy-pasting from one textbox to another does not carry over the rich text format
+  - textbox.richTextInfoClipboard is contained within a textbox itself. Making it a global within the app could fix this but it will not work when some text is pasted from outside the app
+- [ ] pressing tab does not work in textbox #text
+  - will need to prevent default behaviour
+- [ ] button hover animation does not finish even when the container panel is closed #menu
+- [ ] double clicking to select a word also selects special characters, need to treat special char as whitespaces #text
+- [ ] double clicking a word sometimes takes you out of the typing mode #text
+- [ ] copied text from textbox has extra spaces where the text was wrapped #text
+- [ ] highlighting text is shifted upwards slightly than expected when wordWrap is off #text
+- [ ] resizing window stretches the canvas #html #DPR
+  - this issue is caused by css property canvas { width: 100%, height: 100% }. If we remove it resizing is fixed but then the DPR scaling breaks and canvas becomes blurry
+- [ ] a single emoji behaves like 2 characters instead of 1 #text
+- [ ] ctrl + left/right arrow only stops at whitespaces, should stop at all non-alphanumeric characters

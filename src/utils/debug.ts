@@ -43,7 +43,7 @@ export const pointerDebugger = (
   let halo: Path2D | null = new Path2D()
   let center: Path2D | null = new Path2D()
   let pressed: boolean = false
-  let coords: Vector2D
+  let coords: Vector2D = vector.create(0,0)
 
   window.addEventListener("pointerdown", (event) => {
     pressed = true
@@ -89,6 +89,35 @@ export const pointerDebugger = (
       ctx.stroke(halo)
       ctx.fill(center)
     }
+
+    gl.fillText(
+      ctx,
+      vector.create(8, 20),
+      `x: ${Math.round(coords.x)}`,
+      1,
+      {
+        font: "Arial",
+        fontSize: 20,
+        fontColor: "white",
+        italic: false,
+        bold: false,
+      }
+    )
+
+    gl.fillText(
+      ctx,
+      vector.create(8, 40),
+      `y: ${Math.round(coords.y)}`,
+      1,
+      {
+        font: "Arial",
+        fontSize: 20,
+        fontColor: "white",
+        italic: false,
+        bold: false,
+      }
+    )
+
   }
 
   return {
@@ -109,7 +138,7 @@ export const createMonitor = (
   let points: Vector2D[] = []
   let time: number = 0
   let oldTime: number = 0
-  let ft = 18
+  let ft = 18 // 60 fps
 
   setInterval(() => {
     time += shiftTime
@@ -187,7 +216,7 @@ export const createMonitor = (
 
     //print frame time
     ctx.fillStyle = "white"
-    ctx.font = `20px Gill Sans`
+    ctx.font = `14px Gill Sans`
     ctx.fillText(`frame time:  ${ft}ms`, coords.x, coords.y - scale * 60)
   }
 

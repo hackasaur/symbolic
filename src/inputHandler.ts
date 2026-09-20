@@ -1,25 +1,39 @@
-import { Textbox } from "./text/textbox";
-import { areCoordsInside } from "./text/textbox";
+import { Textbox } from "./textbox";
+import { areCoordsInside } from "./textbox";
+import { Vector2D } from "./utils/vector";
+import * as menu from "./utils/menu/menu";
 import { PointerInput, KeyboardInput } from "./utils/inputs";
+import { Menu } from "./utils/menu/menu";
+import { TextFormat, TextAlignment } from "./text";
 
 const handlePointerInput = (
-  textbox: Textbox,
   pointerInput: PointerInput,
+  textbox: Textbox,
+  menuHooks?: {
+    areCoordsInside: (coords: Vector2D) => boolean;
+    set: (textFormat: TextFormat & { align: TextAlignment }) => void;
+  },
 ): void => {
-  if (!areCoordsInside(pointerInput.coords, textbox)) {
-    switch (pointerInput.inputType) {
-      case "down": {
-        textbox.typing = false;
-        textbox.events.publish("deselect");
-      }
-    }
-
-    return;
-  }
-
   if (pointerInput !== undefined) {
     switch (pointerInput.inputType) {
       case "down": {
+        let coordsInsideTextMenu =
+          menuHooks !== undefined &&
+          menuHooks.areCoordsInside(pointerInput.coords);
+
+        let coordsOutsideTextbox = !areCoordsInside(
+          pointerInput.coords,
+          textbox,
+        );
+
+        if (coordsOutsideTextbox && !coordsInsideTextMenu) {
+          textbox.typing = false;
+          textbox.events.publish("deselect");
+          break;
+        } else if (coordsInsideTextMenu) {
+          break;
+        }
+
         let coords = pointerInput.coords;
         let clicks = pointerInput.clicks;
 
@@ -29,15 +43,25 @@ const handlePointerInput = (
 
         if (doubleClick) {
           textbox.events.publish("select-word", coords);
-          break;
         } else if (tripleClick) {
           // select line when triple click on a typing shape
           textbox.events.publish("select-line", coords);
-          break;
         } else if (singleClick) {
           textbox.typing = true;
           textbox.events.publish("place-cursor", coords);
-          break;
+
+          let textFormat = textbox.textCursor?.props.textFormat;
+          if (!textFormat) {
+            console.error(`textFormat cannot undefined`);
+            return;
+          }
+
+          let tf = {
+            ...textFormat,
+            align: textbox.props.align,
+          };
+
+          if (menuHooks !== undefined) menuHooks.set(tf);
         }
 
         break;
@@ -46,6 +70,14 @@ const handlePointerInput = (
       case "move": {
         if (!pointerInput.isPressed) {
           return;
+        }
+
+        let coordsInsideTextMenu =
+          menuHooks !== undefined &&
+          menuHooks.areCoordsInside(pointerInput.coords);
+
+        if (coordsInsideTextMenu) {
+          break;
         }
 
         textbox.events.publish("select", pointerInput.coords);
