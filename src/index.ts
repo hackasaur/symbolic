@@ -32,11 +32,11 @@ function main() {
       // text for debugging
       "Symbolic",
       "A graphical rich text editor designed for extensibility and performance",
-      "The quick brown fox jumped over the lazy dog",
-      "",
-      "0123456789.<.>,;:/?|()[]{}-+=_*&^@!$%^&*~`",
-      "言語",
-      " — 2Bros. Inc.© 🚀",
+      // "The quick brown fox jumped over the lazy dog",
+      // "",
+      // "0123456789.<.>,;:/?|()[]{}-+=_*&^@!$%^&*~`",
+      // "言語",
+      // " — 2Bros. Inc.© 🚀",
     ],
     richTextInfos: [
       {
@@ -60,98 +60,128 @@ function main() {
         },
       },
       {
-        lineNoPosition: { lineNo: 2, positionInLine: 0 },
+        lineNoPosition: { lineNo: 1, positionInLine: 11 },
         textFormat: {
           font: "Bradley Hand",
           fontSize: 28,
-          fontColor: "white",
-          italic: false,
-          bold: false,
-        },
-      },
-      {
-        lineNoPosition: { lineNo: 2, positionInLine: 4 },
-        textFormat: {
-          font: "Avenir Next",
-          fontSize: 24,
-          fontColor: "green",
+          fontColor: "gold",
           italic: true,
           bold: false,
         },
       },
       {
-        lineNoPosition: { lineNo: 2, positionInLine: 15 },
+        lineNoPosition: { lineNo: 1, positionInLine: 16 },
         textFormat: {
           font: "Baskerville",
           fontSize: 28,
-          fontColor: "skyblue",
+          fontColor: "cyan",
           italic: false,
           bold: true,
         },
       },
       {
-        lineNoPosition: { lineNo: 2, positionInLine: 19 },
+        lineNoPosition: { lineNo: 1, positionInLine: 21 },
         textFormat: {
-          font: "Bradley Hand",
+          font: "Courier New",
           fontSize: 28,
-          fontColor: "red",
-          italic: true,
-          bold: false,
-        },
-      },
-      {
-        lineNoPosition: { lineNo: 2, positionInLine: 26 },
-        textFormat: {
-          font: "Bradley Hand",
-          fontSize: 24,
-          fontColor: "white",
-          italic: false,
-          bold: false,
-        },
-      },
-      {
-        lineNoPosition: { lineNo: 2, positionInLine: 36 },
-        textFormat: {
-          font: "Bradley Hand",
-          fontSize: 24,
-          fontColor: "yellow",
-          italic: true,
-          bold: false,
-        },
-      },
-      {
-        lineNoPosition: { lineNo: 2, positionInLine: 40 },
-        textFormat: {
-          font: "Bradley Hand",
-          fontSize: 28,
-          fontColor: "skyblue",
+          fontColor: "magenta",
           italic: false,
           bold: true,
         },
       },
       {
-        lineNoPosition: { lineNo: 3, positionInLine: 0 },
+        lineNoPosition: { lineNo: 1, positionInLine: 28},
         textFormat: {
           font: "Bradley Hand",
-          fontSize: 32,
+          fontSize: 28,
           fontColor: "white",
           italic: false,
           bold: false,
         },
       },
-      {
-        lineNoPosition: { lineNo: 5, positionInLine: 0 },
-        textFormat: {
-          font: "Avenir Next",
-          fontSize: 24,
-          fontColor: "white",
-          italic: false,
-          bold: false,
-        },
-      },
+      // {
+      //   lineNoPosition: { lineNo: 2, positionInLine: 4 },
+      //   textFormat: {
+      //     font: "Avenir Next",
+      //     fontSize: 24,
+      //     fontColor: "green",
+      //     italic: true,
+      //     bold: false,
+      //   },
+      // },
+      // {
+      //   lineNoPosition: { lineNo: 2, positionInLine: 15 },
+      //   textFormat: {
+      //     font: "Baskerville",
+      //     fontSize: 28,
+      //     fontColor: "skyblue",
+      //     italic: false,
+      //     bold: true,
+      //   },
+      // },
+      // {
+      //   lineNoPosition: { lineNo: 2, positionInLine: 19 },
+      //   textFormat: {
+      //     font: "Bradley Hand",
+      //     fontSize: 28,
+      //     fontColor: "red",
+      //     italic: true,
+      //     bold: false,
+      //   },
+      // },
+      // {
+      //   lineNoPosition: { lineNo: 2, positionInLine: 26 },
+      //   textFormat: {
+      //     font: "Bradley Hand",
+      //     fontSize: 24,
+      //     fontColor: "white",
+      //     italic: false,
+      //     bold: false,
+      //   },
+      // },
+      // {
+      //   lineNoPosition: { lineNo: 2, positionInLine: 36 },
+      //   textFormat: {
+      //     font: "Bradley Hand",
+      //     fontSize: 24,
+      //     fontColor: "yellow",
+      //     italic: true,
+      //     bold: false,
+      //   },
+      // },
+      // {
+      //   lineNoPosition: { lineNo: 2, positionInLine: 40 },
+      //   textFormat: {
+      //     font: "Bradley Hand",
+      //     fontSize: 28,
+      //     fontColor: "skyblue",
+      //     italic: false,
+      //     bold: true,
+      //   },
+      // },
+      // {
+      //   lineNoPosition: { lineNo: 3, positionInLine: 0 },
+      //   textFormat: {
+      //     font: "Bradley Hand",
+      //     fontSize: 32,
+      //     fontColor: "white",
+      //     italic: false,
+      //     bold: false,
+      //   },
+      // },
+      // {
+      //   lineNoPosition: { lineNo: 5, positionInLine: 0 },
+      //   textFormat: {
+      //     font: "Avenir Next",
+      //     fontSize: 24,
+      //     fontColor: "white",
+      //     italic: false,
+      //     bold: false,
+      //   },
+      // },
     ],
     center: vector.create(600, 400),
-    width: 520,
+    width: 550,
     height: 0,
     textCursorPosition: { lineNo: 0, positionInLine: 0 },
     textCursorWidth: SETTINGS.textbox.cursorWidth,
@@ -174,7 +204,7 @@ function main() {
   }
 
   // === Text Menu ===
-  const textMenu = txtMenu.create(vector.create(400, 150), el);
+  const textMenu = txtMenu.create(vector.create(400, 250), el);
 
   if (textMenu instanceof Error) {
     console.error(textMenu);
