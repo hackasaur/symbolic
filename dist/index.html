@@ -1,0 +1,46 @@
+<!doctype html>
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, height=device-height, user-scalable=no"
+    />
+    <!-- content="width=device-width, height=device-height, initial-scale=1.0, minimum-scale=1.0" -->
+
+    <!-- The loading of KaTeX is deferred to speed up page rendering -->
+    <script type="module" crossorigin src="/assets/index-BkqD66w1.js"></script>
+    <link rel="stylesheet" crossorigin href="/assets/index-D3DBifuQ.css">
+  </head>
+
+  <!--<script type="module" src="./src/sandbox.ts"></script>-->
+
+  <!--<script>
+  MathJax = {
+    loader: {
+      load: ['input/tex', 'output/svg', '[tex]/color']
+    },
+    tex: {
+      inlineMath: [['$', '$'], ['\\(', '\\)']]
+    },
+  };
+  </script>-->
+  <!--<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>-->
+
+  <body>
+    <!--<div id="math"></div>-->
+    <div style="display: flex; flex-direction: row; gap: 10px">
+        <div class="controls">
+            <button id="up">↑</button>
+            <button id="down">↓</button>
+            <button id="left">←</button>
+            <button id="right">→</button>
+        </div>
+        <input type="range" id="slider" min="0" max="1000" value="200">
+        <div id="key" style="color:white; font-size: 15px;">⌨</div>
+    </div>
+    <div id="canvas-container">
+      <canvas id="scene"></canvas>
+      <canvas id="background"></canvas>
+    </div>
+  </body>
+</html>
