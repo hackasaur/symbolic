@@ -43,7 +43,7 @@ function main() {
         lineNoPosition: { lineNo: 0, positionInLine: 0 },
         textFormat: {
           font: "Courier New",
-          fontSize: 36,
+          fontSize: 40,
           fontColor: "PowderBlue",
           italic: false,
           bold: true,
@@ -80,7 +80,7 @@ function main() {
         },
       },
       {
-        lineNoPosition: { lineNo: 1, positionInLine: 21 },
+        lineNoPosition: { lineNo: 1, positionInLine: 22 },
         textFormat: {
           font: "Courier New",
           fontSize: 28,
@@ -204,7 +204,7 @@ function main() {
   }
 
   // === Text Menu ===
-  const textMenu = txtMenu.create(vector.create(400, 250), el);
+  const textMenu = txtMenu.create(vector.create(400, 270), el);
 
   if (textMenu instanceof Error) {
     console.error(textMenu);
