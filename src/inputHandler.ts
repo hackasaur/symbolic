@@ -1,10 +1,13 @@
+import * as menu from "./utils/menu/menu";
+import * as vector from "./utils/vector";
+import * as sbar from "./utils/scrollbar";
 import { Textbox } from "./textbox";
 import { areCoordsInside } from "./textbox";
 import { Vector2D } from "./utils/vector";
-import * as menu from "./utils/menu/menu";
 import { PointerInput, KeyboardInput } from "./utils/inputs";
 import { Menu } from "./utils/menu/menu";
 import { TextFormat, TextAlignment } from "./text";
+import { clamp } from "./utils/misc";
 
 const handlePointerInput = (
   pointerInput: PointerInput,
@@ -69,7 +72,7 @@ const handlePointerInput = (
 
       case "move": {
         if (!pointerInput.isPressed) {
-          return;
+          break;
         }
 
         let coordsInsideTextMenu =
@@ -81,10 +84,20 @@ const handlePointerInput = (
         }
 
         textbox.events.publish("select", pointerInput.coords);
+        break;
       }
 
       case "up": {
         break;
+      }
+
+      case "wheel": {
+        textbox.props.scrollXY = vector.create(
+          textbox.scrollbarX.props.offset * (textbox.textWidth - textbox.scrollbarX.sliderLength),
+          textbox.scrollbarY.props.offset * (textbox.textHeight - textbox.scrollbarY.sliderLength * textbox.textHeight / (textbox.props.height + textbox.props.padding)),
+        );
+
+        sbar.scroll(textbox.scrollbarY, pointerInput.delta.y);
       }
     }
   }

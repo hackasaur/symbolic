@@ -11,7 +11,7 @@ import { TextAlignment, TextFormat } from "./text.ts";
 import { SETTINGS } from "./settings";
 
 function main() {
-  const [result, err] = gl.initializeCanvas("scene", "black");
+  const [result, err] = gl.initializeCanvas("scene", SETTINGS.backgroundColor);
 
   if (err != null || result === null) {
     console.error(err);
@@ -27,20 +27,111 @@ function main() {
   const { canvas, ctx } = result;
 
   // === Textbox ===
-  let text = {
+  // let textboxProps = {
+  //   lines: [
+  //       "Symbolic",
+  //       "A graphical rich text editor ",
+  //       "designed for extensibility and performance",
+  //       " — 2Bros. Inc.© 🚀"
+  //   ],
+  //   richTextInfos: [
+  //     {
+  //       lineNoPosition: { lineNo: 0, positionInLine: 0 },
+  //       textFormat: {
+  //         font: "Courier New",
+  //         fontSize: 40,
+  //         fontColor: "PowderBlue",
+  //         italic: false,
+  //         bold: true,
+  //       },
+  //     },
+  //     {
+  //       lineNoPosition: { lineNo: 1, positionInLine: 0 },
+  //       textFormat: {
+  //         font: "Bradley Hand",
+  //         fontSize: 32,
+  //         fontColor: "white",
+  //         italic: false,
+  //         bold: false,
+  //       },
+  //     },
+  //     {
+  //       lineNoPosition: { lineNo: 1, positionInLine: 11 },
+  //       textFormat: {
+  //         font: "Bradley Hand",
+  //         fontSize: 28,
+  //         fontColor: "gold",
+  //         italic: true,
+  //         bold: false,
+  //       },
+  //     },
+  //     {
+  //       lineNoPosition: { lineNo: 1, positionInLine: 16 },
+  //       textFormat: {
+  //         font: "Baskerville",
+  //         fontSize: 28,
+  //         fontColor: "cyan",
+  //         italic: false,
+  //         bold: true,
+  //       },
+  //     },
+  //     {
+  //       lineNoPosition: { lineNo: 1, positionInLine: 22 },
+  //       textFormat: {
+  //         font: "Courier New",
+  //         fontSize: 28,
+  //         fontColor: "magenta",
+  //         italic: false,
+  //         bold: true,
+  //       },
+  //     },
+  //     {
+  //       lineNoPosition: { lineNo: 1, positionInLine: 28 },
+  //       textFormat: {
+  //         font: "Bradley Hand",
+  //         fontSize: 28,
+  //         fontColor: "white",
+  //         italic: false,
+  //         bold: false,
+  //       },
+  //     },
+  //   ],
+  //   center: vector.create(600, 450),
+  //   width: 100000,
+  //   height: 200,
+  //   textCursorPosition: { lineNo: 0, positionInLine: 0 },
+  //   textCursorWidth: SETTINGS.textbox.cursorWidth,
+  //   linespace: SETTINGS.textbox.linespace,
+  //   padding: SETTINGS.textbox.padding,
+  //   rotation: 0,
+  //   align: "Left" as TextAlignment,
+  //   wordWrap: true,
+  //   opacity: 1,
+  //   selectionColor: SETTINGS.textbox.highlightColor,
+  //   selectionRadii: SETTINGS.textbox.highlightRadii,
+  //   scrollable: true,
+  //   boxAlign: "Left" as TextAlignment,
+  //   scrollXY: vector.create(0, 0),
+  // };
+
+  let textboxProps = {
+    center: {
+      x: 300,
+      y: 950,
+    },
     lines: [
-      // text for debugging
       "Symbolic",
       "A graphical rich text editor designed for extensibility and performance",
-      // "The quick brown fox jumped over the lazy dog",
-      // "",
-      // "0123456789.<.>,;:/?|()[]{}-+=_*&^@!$%^&*~`",
-      // "言語",
-      // " — 2Bros. Inc.© 🚀",
+      " — 2Bros. Inc.© 🚀",
+      "",
+      "A poet once said, “The whole universe is in a glass of wine.” We will probably never know in what sense he meant that, for poets do not write to be understood.But it is true that if we look at a glass of wine closely enough we see the entire universe.There are the things of physics: the twisting liquid which evaporates depending on the wind and weather, the reflections in the glass, and our imagination adds the atoms.The glass is a distillation of the earth’s rocks, and in its composition we see the secrets of the universe’s age, and the evolution of stars.What strange array of chemicals are in the wine? How did they come to be? There are the ferments, the enzymes, the substrates, and the products.There in wine is found the great generalization: all life is fermentation.Nobody can discover the chemistry of wine without discovering, as did Louis Pasteur, the cause of much disease.How vivid is the claret, pressing its existence into the consciousness that watches it! If our small minds, for some convenience, divide this glass of wine, this universe, into parts—physics, biology, geology, astronomy, psychology, and so on—remember that nature does not know it! So let us put it all back together, not forgetting ultimately what it is for.Let it give us one more final pleasure: drink it and forget it all!",
     ],
     richTextInfos: [
       {
-        lineNoPosition: { lineNo: 0, positionInLine: 0 },
+        lineNoPosition: {
+          lineNo: 0,
+          positionInLine: 0,
+        },
         textFormat: {
           font: "Courier New",
           fontSize: 40,
@@ -50,7 +141,10 @@ function main() {
         },
       },
       {
-        lineNoPosition: { lineNo: 1, positionInLine: 0 },
+        lineNoPosition: {
+          lineNo: 1,
+          positionInLine: 0,
+        },
         textFormat: {
           font: "Bradley Hand",
           fontSize: 32,
@@ -60,7 +154,10 @@ function main() {
         },
       },
       {
-        lineNoPosition: { lineNo: 1, positionInLine: 11 },
+        lineNoPosition: {
+          lineNo: 1,
+          positionInLine: 11,
+        },
         textFormat: {
           font: "Bradley Hand",
           fontSize: 28,
@@ -70,7 +167,10 @@ function main() {
         },
       },
       {
-        lineNoPosition: { lineNo: 1, positionInLine: 16 },
+        lineNoPosition: {
+          lineNo: 1,
+          positionInLine: 16,
+        },
         textFormat: {
           font: "Baskerville",
           fontSize: 28,
@@ -80,7 +180,10 @@ function main() {
         },
       },
       {
-        lineNoPosition: { lineNo: 1, positionInLine: 22 },
+        lineNoPosition: {
+          lineNo: 1,
+          positionInLine: 22,
+        },
         textFormat: {
           font: "Courier New",
           fontSize: 28,
@@ -90,7 +193,10 @@ function main() {
         },
       },
       {
-        lineNoPosition: { lineNo: 1, positionInLine: 28},
+        lineNoPosition: {
+          lineNo: 1,
+          positionInLine: 28,
+        },
         textFormat: {
           font: "Bradley Hand",
           fontSize: 28,
@@ -99,112 +205,38 @@ function main() {
           bold: false,
         },
       },
-      // {
-      //   lineNoPosition: { lineNo: 2, positionInLine: 4 },
-      //   textFormat: {
-      //     font: "Avenir Next",
-      //     fontSize: 24,
-      //     fontColor: "green",
-      //     italic: true,
-      //     bold: false,
-      //   },
-      // },
-      // {
-      //   lineNoPosition: { lineNo: 2, positionInLine: 15 },
-      //   textFormat: {
-      //     font: "Baskerville",
-      //     fontSize: 28,
-      //     fontColor: "skyblue",
-      //     italic: false,
-      //     bold: true,
-      //   },
-      // },
-      // {
-      //   lineNoPosition: { lineNo: 2, positionInLine: 19 },
-      //   textFormat: {
-      //     font: "Bradley Hand",
-      //     fontSize: 28,
-      //     fontColor: "red",
-      //     italic: true,
-      //     bold: false,
-      //   },
-      // },
-      // {
-      //   lineNoPosition: { lineNo: 2, positionInLine: 26 },
-      //   textFormat: {
-      //     font: "Bradley Hand",
-      //     fontSize: 24,
-      //     fontColor: "white",
-      //     italic: false,
-      //     bold: false,
-      //   },
-      // },
-      // {
-      //   lineNoPosition: { lineNo: 2, positionInLine: 36 },
-      //   textFormat: {
-      //     font: "Bradley Hand",
-      //     fontSize: 24,
-      //     fontColor: "yellow",
-      //     italic: true,
-      //     bold: false,
-      //   },
-      // },
-      // {
-      //   lineNoPosition: { lineNo: 2, positionInLine: 40 },
-      //   textFormat: {
-      //     font: "Bradley Hand",
-      //     fontSize: 28,
-      //     fontColor: "skyblue",
-      //     italic: false,
-      //     bold: true,
-      //   },
-      // },
-      // {
-      //   lineNoPosition: { lineNo: 3, positionInLine: 0 },
-      //   textFormat: {
-      //     font: "Bradley Hand",
-      //     fontSize: 32,
-      //     fontColor: "white",
-      //     italic: false,
-      //     bold: false,
-      //   },
-      // },
-      // {
-      //   lineNoPosition: { lineNo: 5, positionInLine: 0 },
-      //   textFormat: {
-      //     font: "Avenir Next",
-      //     fontSize: 24,
-      //     fontColor: "white",
-      //     italic: false,
-      //     bold: false,
-      //   },
-      // },
     ],
-    center: vector.create(600, 400),
-    width: 550,
-    height: 0,
-    textCursorPosition: { lineNo: 0, positionInLine: 0 },
-    textCursorWidth: SETTINGS.textbox.cursorWidth,
-    linespace: SETTINGS.textbox.linespace,
-    padding: SETTINGS.textbox.padding,
-    rotation: 0,
+    linespace: 5,
+    padding: 8,
+    textCursorPosition: {
+      lineNo: 0,
+      positionInLine: 0,
+    },
+    textCursorWidth: 2,
     align: "Left" as TextAlignment,
+    boxAlign: "Left" as TextAlignment,
+    width: 500,
+    height: 600,
+    rotation: 0,
     wordWrap: true,
     opacity: 1,
-    selectionColor: SETTINGS.textbox.highlightColor,
-    selectionRadii: SETTINGS.textbox.highlightRadii,
-    scrollable: false,
-    boxAlign: "Left" as TextAlignment,
+    scrollXY: {
+      x: 0,
+      y: 0,
+    },
+    selectionColor: "rgba(0, 110, 212, 0.4)",
+    selectionRadii: 3,
   };
 
-  let textbox: txtbox.Textbox | Error = txtbox.create(text);
+  let textbox: txtbox.Textbox | Error = txtbox.create(textboxProps);
+
   if (textbox instanceof Error) {
     console.error(textbox);
     return;
   }
 
   // === Text Menu ===
-  const textMenu = txtMenu.create(vector.create(400, 270), el);
+  const textMenu = txtMenu.create(vector.create(180, 80), el);
 
   if (textMenu instanceof Error) {
     console.error(textMenu);
@@ -235,8 +267,8 @@ function main() {
     "key-down",
     (keyboardInput: inputs.KeyboardInput) => {
       inputHandler.handleKeyboardInput(textbox, keyboardInput);
-      if(textbox.typing){
-      const key = getKeysDown(keyboardInput);
+      if (textbox.typing) {
+        const key = getKeysDown(keyboardInput);
         keyDownDiv.innerText = key;
       }
     },
@@ -290,9 +322,6 @@ function main() {
     }
   });
 
-  // slider to set the width (for debugging)
-  const slider = document.getElementById("slider") as HTMLInputElement;
-
   let mainLoop = renderer.startRenderLoop(
     ctx,
     el,
@@ -303,6 +332,8 @@ function main() {
   );
 
   // debug
+  // slider to set the width (for debugging)
+  const slider = document.getElementById("slider") as HTMLInputElement;
   slider.addEventListener("input", () => {
     txtbox.update(textbox, { width: Number(slider.value) });
     txtbox.updateWrap(textbox);
@@ -310,13 +341,13 @@ function main() {
 
   function move(dx: number, dy: number) {
     if (textbox instanceof Error) {
-      console.error(textbox)
-      return
+      console.error(textbox);
+      return;
     }
 
     if (textMenu instanceof Error) {
-      console.error(textMenu)
-      return
+      console.error(textMenu);
+      return;
     }
 
     txtbox.drag(textbox, vector.create(dx, dy));

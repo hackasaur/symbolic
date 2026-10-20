@@ -248,6 +248,7 @@ const createPointerEvents = (el: HTMLElement): PubSub => {
       }
 
       events.publish("wheel", pointerInfo)
+      events.publish("pointer", pointerInfo)
     },
     { passive: false }
   )

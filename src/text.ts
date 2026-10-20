@@ -1341,8 +1341,7 @@ const wrapLines = (
       lines[i],
       richTextInfosByLineNo[i],
       maxWidth,
-      prevRichTextInfo
-      // true
+      prevRichTextInfo,
     )
 
     if (wrap instanceof Error) return wrap

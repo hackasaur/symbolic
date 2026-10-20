@@ -8,7 +8,7 @@ import { DPR } from "./utils/gl";
 import * as vector from "./utils/vector";
 
 export const SETTINGS = {
-  backgroundColor: "rgb(20, 22, 27)", //dark
+  backgroundColor: "rgb(0, 0, 0)", //dark
   windowPadding: 10,
   strokeWidth: 2,
   strokeColor: "rgb(248, 248, 242)",
@@ -29,7 +29,7 @@ export const SETTINGS = {
   },
   textbox: {
     linespace: 5,
-    padding: 4,
+    padding: 8,
     cursorWidth: 2,
     highlightColor: "rgba(0, 110, 212, 0.4)",
     highlightRadii: 3,

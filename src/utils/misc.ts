@@ -51,3 +51,7 @@ export async function loadSvgAsHtmlImage(
     img.src = svgPath
   })
 }
+
+export const clamp = (x: number, min: number, max: number): number => {
+  return Math.max(min, Math.min(max, x))
+}
