@@ -35,6 +35,13 @@ export const SETTINGS = {
     highlightRadii: 3,
     defaultWidth: 200,
   },
+  scrollbar: {
+    sliderSize: 4,
+    extension: 5,
+    sliderColor: { r: 200, g: 200, b: 200 },
+    barColor: { r: 80, g: 80, b: 80 },
+    padding: 18
+  },
   debug: {
     enableStressTest: false,
     pointerHaloRadius: 20,

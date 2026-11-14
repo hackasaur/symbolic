@@ -5,8 +5,8 @@
 import * as vector from "./utils/vector";
 import * as geometry from "./utils/geometry";
 import * as txt from "./text";
-import * as sbar from "./utils/scrollbar"
-import { Scrollbar } from "./utils/scrollbar";
+import * as sbar from "./utils/scrollbar";
+import { Scrollbar} from "./utils/scrollbar";
 import { updateObject } from "./utils/misc";
 import { Vector2D } from "./utils/vector";
 import { PubSub, pubSub } from "./utils/pubsub";
@@ -22,6 +22,14 @@ import {
   TextFormat,
 } from "./text";
 import { SETTINGS } from "./settings";
+
+export interface ScrollbarConfig {
+  sliderSize: number;
+  extension: number;
+  sliderColor: gl.Color;
+  barColor: gl.Color;
+  padding: number;
+}
 
 export interface TextboxArgs {
   center: Vector2D;
@@ -40,6 +48,7 @@ export interface TextboxArgs {
   selectionColor: string;
   selectionRadii: number;
   wordWrap: boolean;
+  scrollbarConfig: ScrollbarConfig;
   scrollXY?: Vector2D;
   wrapInfo?: WrapInfo; // #CAUTION: assumes the wrapInfo being passed is correct
 }
@@ -120,22 +129,29 @@ const create = (props: TextboxArgs): Textbox | Error => {
   );
 
   let scrollbarY = sbar.create({
-    coords: vector.add(textCoords, vector.create(props.width, 0)),
+    coords: vector.add(
+      textCoords,
+      vector.create(props.width + props.padding - props.scrollbarConfig.padding, props.scrollbarConfig.padding),
+    ),
     offset: 0,
-    windowLength: props.height,
+    windowLength: props.height - props.scrollbarConfig.padding - props.padding,
     contentLength: textHeight + props.padding,
-    sliderSize: 10,
-    extension: 5,
-  })
+    sliderSize: props.scrollbarConfig.sliderSize,
+    extension: props.scrollbarConfig.extension,
+    sliderColor: gl.cloneColor(props.scrollbarConfig.sliderColor),
+    barColor: gl.cloneColor(props.scrollbarConfig.barColor),
+  });
 
   let scrollbarX = sbar.create({
     coords: vector.add(textCoords, vector.create(props.width, 0)),
     offset: 0,
     windowLength: props.width,
     contentLength: props.height,
-    sliderSize: 10,
-    extension: 5,
-  })
+    sliderSize: props.scrollbarConfig.sliderSize,
+    extension: props.scrollbarConfig.extension,
+    sliderColor: gl.cloneColor(props.scrollbarConfig.sliderColor),
+    barColor: gl.cloneColor(props.scrollbarConfig.barColor),
+  });
 
   let textbox: Textbox = {
     type: "Textbox",
@@ -159,6 +175,13 @@ const create = (props: TextboxArgs): Textbox | Error => {
       scrollXY: props.scrollXY
         ? vector.copy(props.scrollXY)
         : vector.create(0, 0),
+      scrollbarConfig: {
+        sliderSize: props.scrollbarConfig.sliderSize,
+        extension: props.scrollbarConfig.extension,
+        sliderColor: gl.cloneColor(props.scrollbarConfig.sliderColor),
+        barColor: gl.cloneColor(props.scrollbarConfig.barColor),
+        padding: props.scrollbarConfig.padding
+      },
       selectionColor: props.selectionColor,
       selectionRadii: props.selectionRadii,
     },
@@ -224,6 +247,28 @@ const create = (props: TextboxArgs): Textbox | Error => {
     "wrapUpdated",
     "changedTextFormat",
   ]);
+
+  scrollbarY.events.subscribe("scroll", () => {
+    update(textbox, {
+      scrollXY: vector.create(
+        textbox.props.scrollXY.x,
+        textbox.scrollbarY.props.offset *
+          (textbox.textHeight -
+            (textbox.scrollbarY.sliderLength * textbox.textHeight) /
+              (textbox.props.height + textbox.props.padding)),
+      ),
+    });
+  });
+
+  scrollbarX.events.subscribe("scroll", () => {
+    update(textbox, {
+      scrollXY: vector.create(
+        textbox.scrollbarX.props.offset *
+          (textbox.textWidth - textbox.scrollbarX.sliderLength),
+        textbox.props.scrollXY.y,
+      ),
+    });
+  });
 
   return textbox;
 };
@@ -1583,7 +1628,7 @@ const draw = (
 
     if (textbox.textHeight > textbox.props.height) {
       ctx.lineWidth = 10;
-      ctx.strokeStyle = "rgba(255,255,255,1";
+      ctx.strokeStyle = "rgba(255,255,255,1)";
       ctx.filter = "drop-shadow(0px 0px 15px #ffffff)";
       ctx.strokeRect(
         textbox.textCoords.x - textbox.props.padding - 10,
@@ -1593,8 +1638,7 @@ const draw = (
       );
       ctx.stroke();
       ctx.restore();
-      // drawScrollBar(ctx, vector.add(textbox.textCoords, vector.create(textbox.props.width - 10, 0)), textbox.props.scrollXY, textbox.props.height, textbox.textHeight, 10, "rgba(255,255,255, 1)")
-      sbar.draw(ctx, textbox.scrollbarY)
+      if (textbox.typing) sbar.draw(ctx, textbox.scrollbarY);
     }
 
     if (textbox.typing && textbox.textCursor !== undefined) {
@@ -1913,13 +1957,6 @@ const highlightText = (
 
   return;
 };
-
-const drawScrollBar = (ctx: CanvasRenderingContext2D, coords: Vector2D, scrollXY: Vector2D, windowLength: number, totalLength: number, size: number, color: string, flip?: boolean): void | Error => {
-  let slider: Path2D = new Path2D
-  slider.roundRect(coords.x, coords.y + scrollXY.y * windowLength/totalLength, size, windowLength**2/totalLength, size/2)
-  ctx.fillStyle = "rgba(255, 255, 255, 1)"
-  ctx.fill(slider)
-}
 
 // below functions are not standalone
 const updateTextCursor = (

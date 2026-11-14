@@ -9,13 +9,6 @@ import { Rectangle } from "../geometry.ts"
 import { Button } from "./button.ts"
 import { debugCtx2D, showPoint } from "../debug.ts"
 
-export interface ColorRgba {
-  r: number
-  g: number
-  b: number
-  a: number
-}
-
 // #NOTE2Self: Palatte should have its own interface instead of using Button/Panel
 // The palatteButton and palatte should be a part of the interface
 // TODO: palatte should show the last colors used

@@ -13,6 +13,22 @@ export interface TextFormat {
   bold: boolean
 }
 
+export interface Color {
+  r: number
+  g: number
+  b: number
+}
+
+const cloneColor = (color: Color): Color => {
+  return { r: color.r, g: color.g, b: color.b }
+}
+
+export interface LinearGradient {
+  start: Vector2D
+  end: Vector2D
+  colors: [Color, number][]
+}
+
 export const DPR = () => {
   return window.devicePixelRatio || 1
 }
@@ -321,6 +337,7 @@ function getPointerCoords(event: PointerEvent | WheelEvent): Vector2D {
 // calling getContext() each time when measuring text
 // terribly slowed down the app in tauri but not in Chrome
 // now I have removed ctx from the arguments of gl.measureText()
+// keeping things independent of canvas as much as possible
 let canvas = document.createElement("canvas")
 let ctx_tmp = canvas.getContext("2d")
 if (ctx_tmp === null) {
@@ -339,8 +356,6 @@ function measureText(
   setCtxFont(ctx_tmp, textFormat)
   let textMetrics = ctx_tmp.measureText(text)
   return textMetrics
-
-  // document.removeChild(canvas)
 }
 
 function setCtxFont(
@@ -595,4 +610,5 @@ export {
   strokeRect,
   drawImage,
   drawPencilStroke,
+  cloneColor
 }

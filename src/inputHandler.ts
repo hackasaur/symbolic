@@ -1,6 +1,7 @@
 import * as menu from "./utils/menu/menu";
 import * as vector from "./utils/vector";
 import * as sbar from "./utils/scrollbar";
+import * as txtbox from "./textbox";
 import { Textbox } from "./textbox";
 import { areCoordsInside } from "./textbox";
 import { Vector2D } from "./utils/vector";
@@ -18,6 +19,11 @@ const handlePointerInput = (
   },
 ): void => {
   if (pointerInput !== undefined) {
+    sbar.handlePointerInput(textbox.scrollbarY, pointerInput);
+    if (textbox.scrollbarY.selected) {
+      return;
+    }
+
     switch (pointerInput.inputType) {
       case "down": {
         let coordsInsideTextMenu =
@@ -92,15 +98,13 @@ const handlePointerInput = (
       }
 
       case "wheel": {
-        textbox.props.scrollXY = vector.create(
-          textbox.scrollbarX.props.offset * (textbox.textWidth - textbox.scrollbarX.sliderLength),
-          textbox.scrollbarY.props.offset * (textbox.textHeight - textbox.scrollbarY.sliderLength * textbox.textHeight / (textbox.props.height + textbox.props.padding)),
-        );
-
+        if(textbox.typing)
         sbar.scroll(textbox.scrollbarY, pointerInput.delta.y);
+        break;
       }
     }
   }
+
   return;
 };
 

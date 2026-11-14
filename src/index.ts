@@ -26,93 +26,6 @@ function main() {
 
   const { canvas, ctx } = result;
 
-  // === Textbox ===
-  // let textboxProps = {
-  //   lines: [
-  //       "Symbolic",
-  //       "A graphical rich text editor ",
-  //       "designed for extensibility and performance",
-  //       " — 2Bros. Inc.© 🚀"
-  //   ],
-  //   richTextInfos: [
-  //     {
-  //       lineNoPosition: { lineNo: 0, positionInLine: 0 },
-  //       textFormat: {
-  //         font: "Courier New",
-  //         fontSize: 40,
-  //         fontColor: "PowderBlue",
-  //         italic: false,
-  //         bold: true,
-  //       },
-  //     },
-  //     {
-  //       lineNoPosition: { lineNo: 1, positionInLine: 0 },
-  //       textFormat: {
-  //         font: "Bradley Hand",
-  //         fontSize: 32,
-  //         fontColor: "white",
-  //         italic: false,
-  //         bold: false,
-  //       },
-  //     },
-  //     {
-  //       lineNoPosition: { lineNo: 1, positionInLine: 11 },
-  //       textFormat: {
-  //         font: "Bradley Hand",
-  //         fontSize: 28,
-  //         fontColor: "gold",
-  //         italic: true,
-  //         bold: false,
-  //       },
-  //     },
-  //     {
-  //       lineNoPosition: { lineNo: 1, positionInLine: 16 },
-  //       textFormat: {
-  //         font: "Baskerville",
-  //         fontSize: 28,
-  //         fontColor: "cyan",
-  //         italic: false,
-  //         bold: true,
-  //       },
-  //     },
-  //     {
-  //       lineNoPosition: { lineNo: 1, positionInLine: 22 },
-  //       textFormat: {
-  //         font: "Courier New",
-  //         fontSize: 28,
-  //         fontColor: "magenta",
-  //         italic: false,
-  //         bold: true,
-  //       },
-  //     },
-  //     {
-  //       lineNoPosition: { lineNo: 1, positionInLine: 28 },
-  //       textFormat: {
-  //         font: "Bradley Hand",
-  //         fontSize: 28,
-  //         fontColor: "white",
-  //         italic: false,
-  //         bold: false,
-  //       },
-  //     },
-  //   ],
-  //   center: vector.create(600, 450),
-  //   width: 100000,
-  //   height: 200,
-  //   textCursorPosition: { lineNo: 0, positionInLine: 0 },
-  //   textCursorWidth: SETTINGS.textbox.cursorWidth,
-  //   linespace: SETTINGS.textbox.linespace,
-  //   padding: SETTINGS.textbox.padding,
-  //   rotation: 0,
-  //   align: "Left" as TextAlignment,
-  //   wordWrap: true,
-  //   opacity: 1,
-  //   selectionColor: SETTINGS.textbox.highlightColor,
-  //   selectionRadii: SETTINGS.textbox.highlightRadii,
-  //   scrollable: true,
-  //   boxAlign: "Left" as TextAlignment,
-  //   scrollXY: vector.create(0, 0),
-  // };
 
   let textboxProps = {
     center: {
@@ -223,6 +136,13 @@ function main() {
     scrollXY: {
       x: 0,
       y: 0,
+    },
+    scrollbarConfig: {
+      sliderSize: SETTINGS.scrollbar.sliderSize,
+      extension: SETTINGS.scrollbar.extension,
+      sliderColor: SETTINGS.scrollbar.sliderColor,
+      barColor: SETTINGS.scrollbar.barColor,
+        padding: SETTINGS.scrollbar.padding
     },
     selectionColor: "rgba(0, 110, 212, 0.4)",
     selectionRadii: 3,
