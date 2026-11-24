@@ -274,6 +274,15 @@ function main() {
     menu.drag(textMenu, vector.create(dx, dy));
   }
 
+  function rotate(delta: number) {
+    if (textbox instanceof Error) {
+      console.error(textbox);
+      return;
+    }
+
+    txtbox.rotate(textbox, delta, textbox.props.center);
+  }
+
   let step = 20;
   document
     .getElementById("up")!
@@ -287,6 +296,12 @@ function main() {
   document
     .getElementById("right")!
     .addEventListener("click", () => move(step, 0));
+  document
+    .getElementById("clockwise")!
+    .addEventListener("click", () => rotate(0.01));
+  document
+    .getElementById("anti-clockwise")!
+    .addEventListener("click", () => rotate(-0.01));
 }
 
 main();

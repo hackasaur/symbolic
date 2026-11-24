@@ -14,6 +14,10 @@
   - [ ] ctrl + u (underline)
   - [ ] ctrl + z/r (undo/redo)
 - [ ] tab indentation
+- [ ] urls should be in blue font in textbox
+- [ ] format painter
+- [ ] IME support
+- [ ] animations for text like 3b1b 
 - [x] height of textBox should be expandable (while creating/modifying). text should move to the center
 - [x] text alignment
 - [x] typing mode
@@ -25,11 +29,7 @@
 - [x] word wrap 
 - [x] last word breaking
 - [x] the order of RichTextInfos must be checked
-- [ ] text cursor height should be equal to the line height for that text format 
-- [ ] urls should be in blue font in textbox
-- [ ] animations for text like 3b1b 
-- [ ] format painter
-- [ ] IME support
+- [x] text cursor height should be equal to the line height for that text format 
 
 # bugs
 - [ ] height of the textbox changes slightly when font color is changed 

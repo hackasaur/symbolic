@@ -12,7 +12,7 @@ import tinycolor from "tinycolor2";
 
 export interface ScrollbarProps {
   coords: Vector2D;
-  offset: number;
+  offset: number; // 0 to 1
   windowLength: number;
   contentLength: number;
   sliderSize: number;
@@ -283,6 +283,10 @@ const handlePointerInput = (
   }
 };
 
+const offsetToActualDistance = (offset: number, windowLength: number) => {
+  return offset * windowLength
+}
+
 export {
   create,
   draw,
@@ -293,4 +297,5 @@ export {
   handlePointerInput,
   areCoordsInside,
   areCoordsOnSlider,
+  offsetToActualDistance
 };

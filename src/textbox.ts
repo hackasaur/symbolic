@@ -6,7 +6,7 @@ import * as vector from "./utils/vector";
 import * as geometry from "./utils/geometry";
 import * as txt from "./text";
 import * as sbar from "./utils/scrollbar";
-import { Scrollbar} from "./utils/scrollbar";
+import { Scrollbar } from "./utils/scrollbar";
 import { updateObject } from "./utils/misc";
 import { Vector2D } from "./utils/vector";
 import { PubSub, pubSub } from "./utils/pubsub";
@@ -131,7 +131,10 @@ const create = (props: TextboxArgs): Textbox | Error => {
   let scrollbarY = sbar.create({
     coords: vector.add(
       textCoords,
-      vector.create(props.width + props.padding - props.scrollbarConfig.padding, props.scrollbarConfig.padding),
+      vector.create(
+        props.width + props.padding - props.scrollbarConfig.padding,
+        props.scrollbarConfig.padding,
+      ),
     ),
     offset: 0,
     windowLength: props.height - props.scrollbarConfig.padding - props.padding,
@@ -180,7 +183,7 @@ const create = (props: TextboxArgs): Textbox | Error => {
         extension: props.scrollbarConfig.extension,
         sliderColor: gl.cloneColor(props.scrollbarConfig.sliderColor),
         barColor: gl.cloneColor(props.scrollbarConfig.barColor),
-        padding: props.scrollbarConfig.padding
+        padding: props.scrollbarConfig.padding,
       },
       selectionColor: props.selectionColor,
       selectionRadii: props.selectionRadii,
@@ -277,14 +280,8 @@ const initEventsHandler = (textbox: Textbox, debug?: boolean) => {
   let eventHandler = textbox.events;
 
   eventHandler.subscribe("select", (pointerCoords: Vector2D) => {
-    if (!textbox.typing) {
-      return;
-    }
-
     let textCursor = textbox.textCursor;
     if (textCursor === undefined) return;
-    let wrapInfo = textbox.props.wrapInfo;
-    let textHeight = textbox.textHeight;
 
     if (textbox.initialLineNoPos === undefined) {
       //for initializing selection, the pointer coords have to be inside
@@ -299,10 +296,14 @@ const initEventsHandler = (textbox: Textbox, debug?: boolean) => {
 
     let lineNoPos: LineNoPosition | Error;
     let textCoords = textbox.textCoords;
+    let coordsAdjustedForScroll = translateCoordsToScroll(
+      pointerCoords,
+      textbox,
+    );
 
     if (textbox.props.rotation === 0) {
       lineNoPos = txt.coordsToLineNoPosition(
-        pointerCoords,
+        coordsAdjustedForScroll,
         textCoords,
         textbox.props.lines,
         textbox.props.richTextInfos,
@@ -317,7 +318,7 @@ const initEventsHandler = (textbox: Textbox, debug?: boolean) => {
       }
     } else {
       let coords = vector.rotate(
-        pointerCoords,
+        coordsAdjustedForScroll,
         -textbox.props.rotation,
         textbox.props.center,
       );
@@ -354,10 +355,6 @@ const initEventsHandler = (textbox: Textbox, debug?: boolean) => {
   });
 
   eventHandler.subscribe("place-cursor", (pointerCoords: Vector2D) => {
-    if (!textbox.typing) {
-      return;
-    }
-
     let textCursor = textbox.textCursor;
     if (textCursor === undefined) return;
 
@@ -368,10 +365,14 @@ const initEventsHandler = (textbox: Textbox, debug?: boolean) => {
     // if pointerdown move textCursor to the position of the Pointer
     let lineNoPos: LineNoPosition | Error;
     let textCoords = textbox.textCoords;
+    let coordsAdjustedForScroll = translateCoordsToScroll(
+      pointerCoords,
+      textbox,
+    );
 
     if (textbox.props.rotation === 0) {
       lineNoPos = txt.coordsToLineNoPosition(
-        pointerCoords,
+        coordsAdjustedForScroll,
         textCoords,
         textbox.props.lines,
         textbox.props.richTextInfos,
@@ -381,7 +382,7 @@ const initEventsHandler = (textbox: Textbox, debug?: boolean) => {
       );
     } else {
       let coords = vector.rotate(
-        pointerCoords,
+        coordsAdjustedForScroll,
         -textbox.props.rotation,
         textbox.props.center,
       );
@@ -419,10 +420,6 @@ const initEventsHandler = (textbox: Textbox, debug?: boolean) => {
   });
 
   eventHandler.subscribe("select-word", (pointerCoords: Vector2D) => {
-    if (!textbox.typing) {
-      return;
-    }
-
     let textCursor = textbox.textCursor;
     if (textCursor === undefined) return;
 
@@ -433,10 +430,14 @@ const initEventsHandler = (textbox: Textbox, debug?: boolean) => {
     // if pointerdown move textCursor to the position of the Pointer
     let lineNoPos: LineNoPosition | Error;
     let textCoords = textbox.textCoords;
+    let coordsAdjustedForScroll = translateCoordsToScroll(
+      pointerCoords,
+      textbox,
+    );
 
     if (textbox.props.rotation === 0) {
       lineNoPos = txt.coordsToLineNoPosition(
-        pointerCoords,
+        coordsAdjustedForScroll,
         textCoords,
         textbox.props.lines,
         textbox.props.richTextInfos,
@@ -448,7 +449,7 @@ const initEventsHandler = (textbox: Textbox, debug?: boolean) => {
       if (lineNoPos instanceof Error) return lineNoPos;
     } else {
       let coords = vector.rotate(
-        pointerCoords,
+        coordsAdjustedForScroll,
         -textbox.props.rotation,
         textbox.props.center,
       );
@@ -512,24 +513,23 @@ const initEventsHandler = (textbox: Textbox, debug?: boolean) => {
   });
 
   eventHandler.subscribe("select-line", (pointerCoords: Vector2D) => {
-    if (!textbox.typing) {
+    if (!areCoordsInside(pointerCoords, textbox)) {
       return;
     }
+    // if pointerdown move textCursor to the position of the Pointer
+    let lineNoPos: LineNoPosition | Error;
+    let textCoords = textbox.textCoords;
+    let coordsAdjustedForScroll = translateCoordsToScroll(
+      pointerCoords,
+      textbox,
+    );
 
     let textCursor = textbox.textCursor;
     if (textCursor === undefined) return;
 
-    if (!areCoordsInside(pointerCoords, textbox)) {
-      return;
-    }
-
-    // if pointerdown move textCursor to the position of the Pointer
-    let lineNoPos: LineNoPosition | Error;
-    let textCoords = textbox.textCoords;
-
     if (textbox.props.rotation === 0) {
       lineNoPos = txt.coordsToLineNoPosition(
-        pointerCoords,
+        coordsAdjustedForScroll,
         textCoords,
         textbox.props.lines,
         textbox.props.richTextInfos,
@@ -541,7 +541,7 @@ const initEventsHandler = (textbox: Textbox, debug?: boolean) => {
       if (lineNoPos instanceof Error) return lineNoPos;
     } else {
       let coords = vector.rotate(
-        pointerCoords,
+        coordsAdjustedForScroll,
         -textbox.props.rotation,
         textbox.props.center,
       );
@@ -1545,63 +1545,13 @@ const draw = (
   textbox: Textbox,
   debug?: boolean,
 ) => {
-  if (textbox.selectedTextPos.selected === true) {
-    highlightText(
-      ctx,
-      textbox,
-      textbox.selectedTextPos.posA,
-      textbox.selectedTextPos.posB,
-      textbox.props.selectionColor,
-      textbox.props.selectionRadii,
-      undefined,
-      debug,
-    );
-  }
+  let isScroll =
+    textbox.textHeight > textbox.props.height ||
+    textbox.textWidth > textbox.props.width;
 
-  if (textbox.props.rotation !== 0) {
-    ctx.save();
-    ctx.translate(textbox.props.center.x, textbox.props.center.y);
-    ctx.rotate(textbox.props.rotation);
-    if (textbox.textHeight > textbox.props.height) {
-      let clipPath: Path2D = new Path2D();
-      clipPath.rect(
-        textbox.textCoords.x,
-        textbox.textCoords.y,
-        textbox.props.width,
-        textbox.props.height,
-      );
-      ctx.clip(clipPath);
-    }
-
-    txt.print(
-      ctx,
-      vector.subtract(textbox.textCoords, textbox.props.center),
-      textbox.props.lines,
-      textbox.props.linespace,
-      textbox.props.richTextInfos,
-      textbox.props.align,
-      textbox.props.opacity,
-      textbox.textWidth,
-      debug,
-    );
-
-    if (textbox.typing && textbox.textCursor !== undefined) {
-      let coords = vector.copy(textbox.textCursor.props.coords);
-
-      // subtract the textCursor coords by textbox.props.center
-      // as ctx is translated to the center when rotated
-      textbox.textCursor.props.coords = vector.subtract(
-        coords,
-        textbox.props.center,
-      );
-
-      textbox.textCursor.draw(ctx);
-
-      // set the textCursor coords back to original
-      textbox.textCursor.props.coords = coords;
-    }
-  } else {
-    if (textbox.textHeight > textbox.props.height) {
+  if (textbox.props.rotation === 0) {
+    // clip so that only the text within the scrolling window is visible
+    if (isScroll) {
       ctx.save();
       let clipPath: Path2D = new Path2D();
       clipPath.roundRect(
@@ -1612,11 +1562,14 @@ const draw = (
         SETTINGS.cornerRadii * 4,
       );
       ctx.clip(clipPath);
+      // translate by scrollXY
+      ctx.translate(-textbox.props.scrollXY.x, -textbox.props.scrollXY.y);
     }
 
+    // print the text
     txt.print(
       ctx,
-      vector.subtract(textbox.textCoords, textbox.props.scrollXY),
+      textbox.textCoords,
       textbox.props.lines,
       textbox.props.linespace,
       textbox.props.richTextInfos,
@@ -1626,7 +1579,29 @@ const draw = (
       debug,
     );
 
-    if (textbox.textHeight > textbox.props.height) {
+    if (textbox.selectedTextPos.selected === true) {
+      highlightText(
+        ctx,
+        textbox,
+        textbox.selectedTextPos.posA,
+        textbox.selectedTextPos.posB,
+        textbox.props.selectionColor,
+        textbox.props.selectionRadii,
+        undefined,
+        debug,
+      );
+    }
+
+    if (textbox.typing && textbox.textCursor !== undefined) {
+      textbox.textCursor.draw(ctx);
+    }
+
+    if (isScroll) {
+      // scrollbar
+      ctx.translate(textbox.props.scrollXY.x, textbox.props.scrollXY.y);
+      if (textbox.typing) sbar.draw(ctx, textbox.scrollbarY);
+
+      // border glow
       ctx.lineWidth = 10;
       ctx.strokeStyle = "rgba(255,255,255,1)";
       ctx.filter = "drop-shadow(0px 0px 15px #ffffff)";
@@ -1637,18 +1612,89 @@ const draw = (
         textbox.props.height + 2 * textbox.props.padding + 20,
       );
       ctx.stroke();
-      ctx.restore();
-      if (textbox.typing) sbar.draw(ctx, textbox.scrollbarY);
+      ctx.filter = "none";
+    }
+  } else {
+    ctx.save();
+    ctx.translate(textbox.props.center.x, textbox.props.center.y);
+    ctx.rotate(textbox.props.rotation);
+
+    // Context is already rotated, so the clip lives in the same local
+    // space as the text
+
+    if (isScroll) {
+      let localOrigin = vector.subtract(
+        textbox.textCoords,
+        textbox.props.center,
+      );
+
+      let clipPath: Path2D = new Path2D();
+      clipPath.roundRect(
+        localOrigin.x - textbox.props.padding,
+        localOrigin.y - textbox.props.padding,
+        textbox.props.width + 2 * textbox.props.padding,
+        textbox.props.height + 2 * textbox.props.padding,
+        SETTINGS.cornerRadii * 4,
+      );
+      ctx.clip(clipPath);
+
+      ctx.translate(
+        -textbox.props.scrollXY.x - textbox.props.center.x,
+        -textbox.props.scrollXY.y - textbox.props.center.y,
+      );
+    }
+
+    txt.print(
+      ctx,
+      // vector.subtract(localOrigin, textbox.props.scrollXY),
+      textbox.textCoords,
+      textbox.props.lines,
+      textbox.props.linespace,
+      textbox.props.richTextInfos,
+      textbox.props.align,
+      textbox.props.opacity,
+      textbox.textWidth,
+      debug,
+    );
+
+    if (textbox.selectedTextPos.selected === true) {
+      highlightText(
+        ctx,
+        textbox,
+        textbox.selectedTextPos.posA,
+        textbox.selectedTextPos.posB,
+        textbox.props.selectionColor,
+        textbox.props.selectionRadii,
+        undefined,
+        debug,
+      );
     }
 
     if (textbox.typing && textbox.textCursor !== undefined) {
       textbox.textCursor.draw(ctx);
     }
+
+    if (isScroll) {
+      // scrollbar
+      ctx.translate(textbox.props.scrollXY.x, textbox.props.scrollXY.y);
+      if (textbox.typing) sbar.draw(ctx, textbox.scrollbarY);
+
+      // border glow
+      ctx.lineWidth = 10;
+      ctx.strokeStyle = "rgba(255,255,255,1)";
+      ctx.filter = "drop-shadow(0px 0px 15px #ffffff)";
+      ctx.strokeRect(
+        textbox.textCoords.x - textbox.props.padding - 10,
+        textbox.textCoords.y - textbox.props.padding - 10,
+        textbox.props.width + 2 * textbox.props.padding + 20,
+        textbox.props.height + 2 * textbox.props.padding + 20,
+      );
+      ctx.stroke();
+      ctx.filter = "none";
+    }
   }
 
-  if (textbox.props.rotation !== 0) {
-    ctx.restore();
-  }
+  ctx.restore();
 
   // debug
   if (debug) {
@@ -1743,18 +1789,6 @@ const highlightText = (
   let richTextInfos = textbox.props.richTextInfos;
   let linespace = textbox.props.linespace;
 
-  if (textbox.props.rotation !== 0) {
-    ctx.save();
-    ctx.translate(textbox.props.center.x, textbox.props.center.y);
-
-    ctx.rotate(textbox.props.rotation);
-
-    textCoords = vector.subtract(textbox.textCoords, textbox.props.center);
-    lines = textbox.props.lines;
-    richTextInfos = textbox.props.richTextInfos;
-    linespace = textbox.props.linespace;
-  }
-
   if (lineNoDiff === 0) {
     height = txt.lineHeight(start.lineNo, richTextInfos) + linespace / 2;
 
@@ -1816,9 +1850,6 @@ const highlightText = (
       ctx.strokeRect(topLeftCoords.x, topLeftCoords.y, width, height);
     }
 
-    if (textbox.props.rotation !== 0) {
-      ctx.restore();
-    }
     return;
   }
 
@@ -1949,10 +1980,6 @@ const highlightText = (
       ctx.lineWidth = 2;
       ctx.strokeRect(topLeftCoords.x, topLeftCoords.y, width, height);
     }
-  }
-
-  if (textbox.props.rotation !== 0) {
-    ctx.restore();
   }
 
   return;
@@ -2895,20 +2922,20 @@ const drag = (textbox: Textbox, delta: Vector2D) => {
   textbox.events.publish("drag", { delta });
 };
 
-const rotate = (textbox: Textbox, angle: number, about?: Vector2D) => {
+const rotate = (textbox: Textbox, delta: number, about?: Vector2D) => {
   if (about) {
     let r = vector.subtract(textbox.props.center, about);
 
     move(
       textbox,
       vector.create(
-        about.x + Math.cos(angle) * r.x - Math.sin(angle) * r.y,
-        about.y + Math.cos(angle) * r.y + Math.sin(angle) * r.x,
+        about.x + Math.cos(delta) * r.x - Math.sin(delta) * r.y,
+        about.y + Math.cos(delta) * r.y + Math.sin(delta) * r.x,
       ),
     );
   }
 
-  let theta = textbox.props.rotation + angle;
+  let theta = textbox.props.rotation + delta;
   theta = geometry.normalizeAngle(theta);
 
   update(textbox, {
@@ -3013,6 +3040,10 @@ const handleKeyboardEvents = (textfield: Textbox, keyboardEvents: PubSub) => {
       textFormat: undefined,
     });
   });
+};
+
+const translateCoordsToScroll = (coords: Vector2D, textbox: Textbox) => {
+  return vector.add(coords, textbox.props.scrollXY);
 };
 
 // create a hidden input html element
